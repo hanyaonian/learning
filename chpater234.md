@@ -10,3 +10,17 @@
 - js文件按顺序加载，前面的解释完毕才能解释下一个（以前遇到的引用顺序问题）。
 - css放在body前，js放在body后：老生常谈，不阻塞页面加载渲染了。
 - 动态加载脚本：js插入 link rel=‘preload‘ href=’..js‘ 保证动态脚本的优先级
+
+
+## Chapter 3 Some Basic Knowledge
+
+###### 作用域
+- let: 块作用域， var: 函数作用域你
+- let不会被作用域提升，所以声明前的区域是’暂时性死区‘；全局作用域声明的let变量不会变成全局变量；let也不能依赖条件声明模式 
+
+// 避免忘了symbol有点点特殊，btw Symbol用的实在实在太少了。。。
+let s1 = Symbol('123');
+let o = {
+	[s1]: 123
+}
+
