@@ -12,12 +12,15 @@
 - 单线程不阻塞I/O是因为异步的事情交给其他线程去处理了，从而不影响主线程（单线程）运作。可以将主线程描述成一个服务员，服务员可以不停的接到顾客的点菜要求（浏览器顾客可能要：XHR请求、下载文件；nodejs顾客可能要读写文件、处理运算），然后服务员将这些点菜的请求交给厨房里的厨师（不同厨师不同线程），这个过程不影响服务员服务其他顾客。厨师在做完菜后，菜（回调任务，结果）放入到消息队列，服务员做完手头上的事就会一个个菜拿给对应的顾客，且不上完上一个菜不会服务下一个顾客。
 
 事件循环类似于：
+````js
 for(macrotask of macrotaskQueue) {
 	// doMacrotask()...
 	for (microtask of microtaskQueue) {
 		//  doMicrotask()...
 	}
 }
+````
+
 **执行宏任务时，还可以插入微任务，但在微任务完成前，不会到下一个宏任务，示例代码如下：**
 ````js
 setTimeout(function(){
@@ -31,13 +34,13 @@ console.log('3')
 });
 console.log('4');
 ````
+
 输出： 2 3 4 1
 promise.then是一个典型的微任务。
-根据其他博主的总结：
-宏任务主要有：整体script代码、setTimeout、setInterval、I/O、requestAnimationFrame 
-微任务主要有：Promise、process.nextTick、MutationObserver
-Vue中的nextTick，就是优先用微任务，以保证其尽快执行nextTick重的回调（采用MutationObserver）
----
++ 根据其他博主的总结：
+	- 宏任务主要有：整体script代码、setTimeout、setInterval、I/O、requestAnimationFrame 
+	- 微任务主要有：Promise、process.nextTick、MutationObserver
+	- Vue中的nextTick，就是优先用微任务，以保证其尽快执行nextTick重的回调（采用MutationObserver）
 
 **事件循环的特点**
 + 1. 执行至完成
