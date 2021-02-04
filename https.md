@@ -28,9 +28,9 @@ http是明文传输。如果通过http传输数据，在能够获取网络数据
 	4. public key
 - 客户端验证服务端的数字证书（digital certificate），向谁认证呢？CA（certificate authority）证书颁发机构。正常来说浏览器/系统会预装一些权威机构的认证，一下就完成了认证，确定这个服务端是可信的。
 
-- clientKey exchange。客户端将一个secret key发送给服务端，通过服务端的公钥。
-- 客户端发送一个finish 信息给到服务端，通过客户端发送的密钥进行加密（使用前面商量好的对称加密算法进行加密。），表达客户端的handshake已完成。
-- 客户端也返回一个finish，也是同样的对称算法+密钥。表明服务端的handshake部分已完成
+- clientKey exchange。客户端将一个secret key(对称加密的密钥)发送给服务端，通过服务端的公钥，这样只有服务端能解密获取。
+- 客户端发送一个finish 信息给到服务端，通过客户端发送的密钥进行加密（使用前面商量好的对称加密算法进行加密），表达客户端的handshake已完成，美更多内容了。
+- 服务端也返回一个finish，也是同样的对称算法+密钥。表明服务端的handshake部分已完成
 
 以上就是SSL/TLS hanshake的过程。
 
