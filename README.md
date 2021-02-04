@@ -5,6 +5,7 @@
 - HTTP1.0、HTTP1.1、HTTP2、HTTP3
 - WebSocket
 - CDN 作用及原理
+- https (https://github.com/hanyaonian/interview/blob/main/https.md)
 ### 编程语言
 - 基础：红宝书
 - 变量和类型问题

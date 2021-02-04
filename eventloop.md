@@ -34,16 +34,16 @@ for(macrotask of macrotaskQueue) {
 setTimeout(function(){
 	console.log('1')
 	});
-new  Promise(function(resolve){
-  console.log('2');
-  resolve();
+new Promise(function(resolve) {
+    console.log('2');
+    resolve();
 }).then(function(){
-console.log('3')
+	console.log('3')
 });
 console.log('4');
 ````
 
-输出： 2 3 4 1
+输出： 2 4 3 1
 promise.then是一个典型的微任务。
 + 根据其他博主的总结：
 	- 宏任务主要有：整体script代码、setTimeout、setInterval、I/O（UI交互等）、requestAnimationFrame 
