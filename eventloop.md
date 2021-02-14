@@ -41,10 +41,43 @@ new Promise(function(resolve) {
 	console.log('3')
 });
 console.log('4');
+// 输出： 2 4 3 1
+````
+````js
+async function async1() {
+    console.log('a1 start');
+    await async2();
+    console.log('a1 end');
+}
+async function async2() {
+    console.log('a2');
+}
+console.log('script start');
+setTimeout(function() {
+    console.log('setTimeout');
+}, 0)
+async1();
+new Promise(function(resolve) {
+    console.log('p1');
+    resolve();
+}).then(function() {
+    console.log('p2');
+});
+console.log('script end');
+/*
+输出:
+script start 
+a1 start
+a2 (队列新任务)
+p1
+script end
+a1 end (await 之后的相当于是Promise.then，微任务)
+p2 (微任务)
+setTimeout (宏任务)
+ */
 ````
 
-输出： 2 4 3 1
-promise.then是一个典型的微任务。
+###### promise.then是一个典型的微任务。
 + 根据其他博主的总结：
 	- 宏任务主要有：整体script代码、setTimeout、setInterval、I/O（UI交互等）、requestAnimationFrame 
 	- 微任务主要有：Promise、process.nextTick、MutationObserver
