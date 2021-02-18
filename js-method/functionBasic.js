@@ -1,5 +1,9 @@
 /**
- * 实现Function Prototype里面的bind，apply，call
+ * 目标：实现Function Prototype里面的bind，apply，call
+ * 
+ * 这里经常使用到...展开表达式剩余参数语法，
+ * 实际上es3的展开表达式都是通过apply或者遍历arguments去做到的，
+ * 所以如果不使用展开表达式（剩余参数语法），很难实现这些方法
  */
 /**
  * 首先要清晰，this究竟是什么？
@@ -9,7 +13,7 @@
  * call() 提供新的 this 值给当前调用的函数/方法。
  * 可以使用 call 来实现继承：写一个方法，然后让另外一个新的对象来继承此方法。
  * @param {*} context 上下文，当穿null或者undefined时，这个将是全局对象(window)
- * @param  {...any} args 传入方法的参数, 此处是es6写法；es3的话可以通过eval+字符串拼接的形式去写，没有过多研究了
+ * @param  {...any} args 传入方法的参数, 此处是es6写法；es3的话似乎也可以通过eval+字符串拼接的形式去写，见上
  */
 Function.prototype.myCall = function (context, ...args) {
 	if (this === Function.prototype) {
