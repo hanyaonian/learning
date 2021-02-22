@@ -19,6 +19,22 @@ function promiseResolutionProcedure(
   }
   // 2.3.2 返回promise
   if (x instanceof myPromise) {
+    if (x.status === promiseStatus.PENDING) {
+      // 2.3.2.1 If x is pending, promise must remain pending until x is fulfilled or rejected.
+      x.then(
+        (value) => {
+          promiseResolutionProcedure(promise2, value, resolve, reject);
+        },
+        (reason) => {
+          reject(reason);
+        }
+      );
+    } else {
+      // 2.3.2.2 If/when x is fulfilled, fulfill promise with the same value.
+      // 2.3.2.3 If/when x is rejected, reject promise with the same reason.
+      x.then(resolve, reject);
+    }
+    return;
   }
   // 2.3.3 x 是对象或者函数
   // typeof null 是object
@@ -33,24 +49,24 @@ function promiseResolutionProcedure(
         then.call(
           x,
           (y) => {
-            isCalled = true;
             // 2.3.3.3.3 If both resolvePromise and rejectPromise are called,
             // or multiple calls to the same argument are made,
             // the first call takes precedence, and any further calls are ignored.
             if (isCalled) {
               return;
             }
+            isCalled = true;
             // 2.3.3.3.1
-            promiseResolutionProcedure(promise2, y, resolve, reject);
+            return promiseResolutionProcedure(promise2, y, resolve, reject);
           },
           (reason) => {
-            isCalled = true;
             // 2.3.3.3.3
             if (isCalled) {
               return;
             }
+            isCalled = true;
             // 2.3.3.3.2
-            reject(reason);
+            return reject(reason);
           }
         );
         //2.3.3.3.4 If calling then throws an exception e
@@ -59,7 +75,7 @@ function promiseResolutionProcedure(
           return;
         }
         isCalled = true;
-        reject(err);
+        return reject(err);
       }
     } else {
       // 2.3.3.4 If then is not a function, fulfill promise with x.
