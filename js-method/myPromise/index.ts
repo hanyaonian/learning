@@ -7,86 +7,6 @@ export enum promiseStatus {
 export type promiseExecutor = (resolve: Function, reject?: Function) => void;
 type callbackVoidFunction = () => void;
 
-// 链式调用问题处理，2.3
-function promiseResolutionProcedure(
-  promise2: myPromise,
-  x: any,
-  resolve,
-  reject
-) {
-  if (promise2 === x) {
-    throw TypeError('same promise here');
-  }
-  // 2.3.2 返回promise
-  if (x instanceof myPromise) {
-    if (x.status === promiseStatus.PENDING) {
-      // 2.3.2.1 If x is pending, promise must remain pending until x is fulfilled or rejected.
-      x.then(
-        (value) => {
-          promiseResolutionProcedure(promise2, value, resolve, reject);
-        },
-        (reason) => {
-          reject(reason);
-        }
-      );
-    } else {
-      // 2.3.2.2 If/when x is fulfilled, fulfill promise with the same value.
-      // 2.3.2.3 If/when x is rejected, reject promise with the same reason.
-      x.then(resolve, reject);
-    }
-    return;
-  }
-  // 2.3.3 x 是对象或者函数
-  // typeof null 是object
-  if ((typeof x === 'object' && x !== null) || typeof x === 'function') {
-    // 2.3.3.3.4.1 If resolvePromise or rejectPromise have been called, ignore it.
-    let isCalled = false;
-    // 2.3.3.1
-    let then = x.then;
-    // 2.3.3.3
-    if (typeof then === 'function') {
-      try {
-        then.call(
-          x,
-          (y) => {
-            // 2.3.3.3.3 If both resolvePromise and rejectPromise are called,
-            // or multiple calls to the same argument are made,
-            // the first call takes precedence, and any further calls are ignored.
-            if (isCalled) {
-              return;
-            }
-            isCalled = true;
-            // 2.3.3.3.1
-            return promiseResolutionProcedure(promise2, y, resolve, reject);
-          },
-          (reason) => {
-            // 2.3.3.3.3
-            if (isCalled) {
-              return;
-            }
-            isCalled = true;
-            // 2.3.3.3.2
-            return reject(reason);
-          }
-        );
-        //2.3.3.3.4 If calling then throws an exception e
-      } catch (err) {
-        if (isCalled) {
-          return;
-        }
-        isCalled = true;
-        return reject(err);
-      }
-    } else {
-      // 2.3.3.4 If then is not a function, fulfill promise with x.
-      resolve(x);
-    }
-  } else {
-    //2.3.4 If x is not an object or function, fulfill promise with x.
-    resolve(x);
-  }
-}
-
 export default class myPromise {
   status: promiseStatus;
   reason: any;
@@ -208,5 +128,83 @@ export default class myPromise {
     return new myPromise((resolve, reject) => {
       reject(reason);
     });
+  }
+}
+
+// 链式调用问题处理，2.3
+function promiseResolutionProcedure(
+  promise2: myPromise,
+  x: any,
+  resolve,
+  reject
+) {
+  if (promise2 === x) {
+    reject(new TypeError('same promise here'));
+  }
+  // 2.3.2 返回promise
+  if (x instanceof myPromise) {
+    if (x.status === promiseStatus.PENDING) {
+      // 2.3.2.1 If x is pending, promise must remain pending until x is fulfilled or rejected.
+      x.then(
+        (value) => {
+          promiseResolutionProcedure(promise2, value, resolve, reject);
+        },
+        (reason) => {
+          reject(reason);
+        }
+      );
+    } else {
+      // 2.3.2.2 If/when x is fulfilled, fulfill promise with the same value.
+      // 2.3.2.3 If/when x is rejected, reject promise with the same reason.
+      x.then(resolve, reject);
+    }
+    return;
+  }
+  // 2.3.3 x 是对象或者函数
+  // 2.3.3.3.4.1 If resolvePromise or rejectPromise have been called, ignore it.
+  let isCalled = false;
+  // typeof null 是object
+  if ((typeof x === 'object' && x !== null) || typeof x === 'function') {
+    try {
+      // 2.3.3.1 Let then be x.then.
+      let then = x.then;
+      // 2.3.3.3
+      if (typeof then === 'function') {
+        then.call(
+          x,
+          (y) => {
+            // 2.3.3.3.3 If both resolvePromise and rejectPromise are called,
+            // or multiple calls to the same argument are made,
+            // the first call takes precedence, and any further calls are ignored.
+            if (!isCalled) {
+              // 2.3.3.3.1
+              promiseResolutionProcedure(promise2, y, resolve, reject);
+              isCalled = true;
+            }
+          },
+          (reason) => {
+            // 2.3.3.3.3
+            if (!isCalled) {
+              isCalled = true;
+              // 2.3.3.3.2
+              return reject(reason);
+            }
+          }
+        );
+        //2.3.3.3.4 If calling then throws an exception e
+      } else {
+        // 2.3.3.4 If then is not a function, fulfill promise with x.
+        resolve(x);
+      }
+    } catch (err) {
+      if (!isCalled) {
+        isCalled = true;
+        // 2.3.3.2 If retrieving the property x.then results in a thrown exception e, reject promise with e as the reason.
+        return reject(err);
+      }
+    }
+  } else {
+    //2.3.4 If x is not an object or function, fulfill promise with x.
+    resolve(x);
   }
 }
