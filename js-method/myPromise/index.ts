@@ -176,15 +176,15 @@ function promiseResolutionProcedure(
             // 2.3.3.3.3 If both resolvePromise and rejectPromise are called,
             // or multiple calls to the same argument are made,
             // the first call takes precedence, and any further calls are ignored.
-            if (!isCalled) {
-              // 2.3.3.3.1
-              promiseResolutionProcedure(promise2, y, resolve, reject);
+            if (isCalled === false) {
               isCalled = true;
+              // 2.3.3.3.1
+              return promiseResolutionProcedure(promise2, y, resolve, reject);
             }
           },
           (reason) => {
             // 2.3.3.3.3
-            if (!isCalled) {
+            if (isCalled === false) {
               isCalled = true;
               // 2.3.3.3.2
               return reject(reason);
@@ -197,7 +197,7 @@ function promiseResolutionProcedure(
         resolve(x);
       }
     } catch (err) {
-      if (!isCalled) {
+      if (isCalled === false) {
         isCalled = true;
         // 2.3.3.2 If retrieving the property x.then results in a thrown exception e, reject promise with e as the reason.
         return reject(err);
