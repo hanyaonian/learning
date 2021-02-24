@@ -23,25 +23,29 @@ export default class myPromise {
     this.rejectStack = [];
 
     const resolve = (value: any) => {
-      if (this.status !== promiseStatus.PENDING) {
-        return;
-      }
-      this.value = value;
-      this.status = promiseStatus.FULFILLED;
-      this.resolveStack.forEach((func) => {
-        func();
+      // 2.2.4 onFulfilled or onRejected must not be called until the execution context stack contains only platform code.
+      setTimeout(() => {
+        if (this.status === promiseStatus.PENDING) {
+          this.value = value;
+          this.status = promiseStatus.FULFILLED;
+          for (let i = 0; i < this.resolveStack.length; i++) {
+            this.resolveStack[i]();
+          }
+        }
       });
     };
 
     const reject = (reason: any) => {
-      if (this.status !== promiseStatus.PENDING) {
-        return;
-      }
-      this.reason = reason;
-      this.status = promiseStatus.REJECTED;
-      this.rejectStack.forEach((func) => {
-        func();
-      });
+      // 2.2.4
+      setTimeout(() => {
+        if (this.status === promiseStatus.PENDING) {
+          this.reason = reason;
+          this.status = promiseStatus.REJECTED;
+          for (let i = 0; i < this.rejectStack.length; i++) {
+            this.rejectStack[i]();
+          }
+        }
+      }, 0);
     };
     try {
       executor(resolve, reject);
@@ -52,28 +56,39 @@ export default class myPromise {
 
   public then(onFulfilled, onRejected) {
     // 2.2.1 Both onFulfilled and onRejected are optional arguments: if not a function, igonre
+    // 2.2.1 解析: 非function的话传入的是一个fulfilled的内容，所以把该值作为一个传递给promise2用来relsove的function
+
     // 2.2.5 onFulfilled and onRejected must be called as functions (i.e. with no this value). [3.2]
+
+    // 2.7.2.3 If onFulfilled is not a function and promise1 is fulfilled,
+    // promise2 must be fulfilled with the same value as promise1.
     onFulfilled =
       typeof onFulfilled === 'function' ? onFulfilled : (val) => val;
     onRejected =
+      // 2.7.2.4 If onRejected is not a function and promise1 is rejected,
+      // promise2 must be rejected with the same reason as promise1.
+      // 这里的err是promise1 的reject原因，throw 出去promise2 就可以catch到
       typeof onRejected === 'function'
         ? onRejected
         : (err) => {
             throw err;
           };
+    // 2.2.7 then must return a promise
     let promise2 = new myPromise((resolve, reject) => {
-      // 2.2.4 onFulfilled or onRejected must not be called until the execution context stack contains only platform code
-      // 下面的settimeout同理
       if (this.status === promiseStatus.FULFILLED) {
-        // 2.2.7.1 onfufilled 内也返回了值， run the Promise Resolution Procedure
+        // 2.2.4 onFulfilled or onRejected must not be called until the execution context stack contains only platform code
+        // 下面的settimeout同理
         setTimeout(() => {
           try {
             let x = onFulfilled(this.value);
+            // 调用promiseResolutionProcedure 2.2.7.1 规则
+            // 2.2.7.1  If either onFulfilled or onRejected returns a value x,
+            //run the Promise Resolution Procedure[[Resolve]](promise2, x).
             promiseResolutionProcedure(promise2, x, resolve, reject);
           } catch (err) {
             reject(err);
           }
-        }, 0);
+        });
       }
       if (this.status === promiseStatus.REJECTED) {
         setTimeout(() => {
@@ -83,38 +98,36 @@ export default class myPromise {
           } catch (err) {
             // 2.2.7.2 If either onFulfilled or onRejected throws an exception e,
             // promise2 must be rejected with e as the reason.
+            // 下面同理
             reject(err);
           }
-        }, 0);
+        });
       }
       // 存储顺序，执行到resolve，reject的时候会调用顺序栈里的结果
+      // 这里用的设计模式是订阅，stack里存的是订阅者，调用resolve属于发布
       if (this.status === promiseStatus.PENDING) {
-        // 2.2.6.1
+        // 2.2.6.1 If/when promise is fulfilled,
+        // all respective onFulfilled callbacks must execute in the order of their originating calls to then.
         this.resolveStack.push(() => {
-          setTimeout(() => {
-            try {
-              let x = onFulfilled(this.value);
-              promiseResolutionProcedure(promise2, x, resolve, reject);
-            } catch (err) {
-              reject(err);
-            }
-          }, 0);
+          try {
+            let x = onFulfilled(this.value);
+            promiseResolutionProcedure(promise2, x, resolve, reject);
+          } catch (err) {
+            reject(err);
+          }
         });
         // 2.2.6.2
         this.rejectStack.push(() => {
-          setTimeout(() => {
-            try {
-              let x = onRejected(this.reason);
-              promiseResolutionProcedure(promise2, x, resolve, reject);
-            } catch (err) {
-              reject(err);
-            }
-          }, 0);
+          try {
+            let x = onRejected(this.reason);
+            promiseResolutionProcedure(promise2, x, resolve, reject);
+          } catch (err) {
+            reject(err);
+          }
         });
       }
     });
-    // 2.2.7 then must return a promise
-    // 链式调用
+    // 2.2.7 用于链式调用
     return promise2;
   }
 
@@ -167,7 +180,7 @@ function promiseResolutionProcedure(
   if ((typeof x === 'object' && x !== null) || typeof x === 'function') {
     try {
       // 2.3.3.1 Let then be x.then.
-      let then = x.then;
+      let then = x.then as Function;
       // 2.3.3.3
       if (typeof then === 'function') {
         then.call(
@@ -179,7 +192,7 @@ function promiseResolutionProcedure(
             if (isCalled === false) {
               isCalled = true;
               // 2.3.3.3.1
-              return promiseResolutionProcedure(promise2, y, resolve, reject);
+              promiseResolutionProcedure(promise2, y, resolve, reject);
             }
           },
           (reason) => {
@@ -187,7 +200,7 @@ function promiseResolutionProcedure(
             if (isCalled === false) {
               isCalled = true;
               // 2.3.3.3.2
-              return reject(reason);
+              reject(reason);
             }
           }
         );
@@ -200,7 +213,7 @@ function promiseResolutionProcedure(
       if (isCalled === false) {
         isCalled = true;
         // 2.3.3.2 If retrieving the property x.then results in a thrown exception e, reject promise with e as the reason.
-        return reject(err);
+        reject(err);
       }
     }
   } else {
