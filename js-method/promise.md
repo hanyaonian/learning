@@ -1,16 +1,33 @@
+### [源码地址](https://github.com/hanyaonian/interview/tree/main/js-method/myPromise)
+
+要实现 Promise，首先要对 Promise 有所了解，并知其标准。
+
+### Promise 简介(MDN)：
+
+一个 Promise 对象代表一个在这个 promise 被创建出来时不一定已知的值。它让您能够把异步操作最终的成功返回值或者失败原因和相应的处理程序关联起来。 这样使得异步方法可以像同步方法那样返回值：异步方法并不会立即返回最终的值，而是会返回一个 promise，以便在未来某个时候把值交给使用者。
+
+一个 Promise 必然处于以下几种状态之一：
+
+待定（pending）: 初始状态，既没有被兑现，也没有被拒绝。
+已兑现（fulfilled）: 意味着操作成功完成。
+已拒绝（rejected）: 意味着操作失败。
+待定状态的 Promise 对象要么会通过一个值被兑现（fulfilled），要么会通过一个原因（错误）被拒绝（rejected）。当这些情况之一发生时，我们用 promise 的 then 方法排列起来的相关处理程序就会被调用。如果 promise 在一个相应的处理程序被绑定时就已经被兑现或被拒绝了，那么这个处理程序就会被调用，因此在完成异步操作和绑定处理方法之间不会存在竞争状态。
+
+因为 Promise.prototype.then 和 Promise.prototype.catch 方法返回的是 promise， 所以它们可以被链式调用。
+
 ### [Promise 规范](https://promisesaplus.com/)
 
-以下节选 2.2 关键内容，作为实现依据。
+以下节选 2.2 关键翻译内容，作为实现依据。
 
-#### 术语
+#### 关键词
 
 - "promise"是具有 then 方法的对象或函数，其行为符合此规范。
 - "thenable"是定义 then 方法的对象或函数。
-- "value"是任意合法的 Javascript 值，（包括 undefined,thenable, promise）
-- "exception"是使用 throw 语句抛出的值
-- "reason"是表示 promise 为什么被 rejected 的值
+- "value"是任意合法的 Javascript 值，（包括 undefined,thenable, promise），终值
+- "exception"是使用 throw 语句抛出的值，异常
+- "reason"是表示 promise 为什么被 rejected 的值，拒因
 
-#### 状态
+#### 2.1，状态
 
 一个 Promise 的当前状态必须为以下三种状态中的一种：等待态（Pending）、执行态（Fulfilled）和拒绝态（Rejected）。
 
@@ -18,13 +35,15 @@
 - Fulfilled: 必须拥有一个不可变的终值; 状态不可变
 - Rejected: 必须拥有一个不可变的据因; 状态不可变
 
-#### then 方法
+#### 2.2 节选，then 部分
 
 - 一个 promise 必须提供一个 then 方法以访问其当前值、终值和据因。
-- promise 的 then 方法接受两个参数: promise.then(onFulfilled, onRejected), 两个参数必须是函数。
+- promise 的 then 方法接受两个参数（都是可选的）: promise.then(onFulfilled, onRejected), 两个参数是得是函数，如果不是，就忽略掉。
   1.  onFulfilled, 第一个参数为 promise 的终值 value
   2.  onRejected, 第一个参数为 promise 的拒因 reason
-- then 必须返回一个 promise 对象
+- （2.2.4）在执行上下文堆栈（execution context）仅包含平台代码之前，不得调用 onFulfilled 和 onRejected 3.1
+  - 其实这点想想很清楚的， then 是微任务，只有任务队列里没事了才会走，但因为当时头昏没有看懂这句话什么意思，错误的在将回调函数入栈的时候加了个 settimeout，一直写不对，看了很久没看出原因。
+- then 必须返回一个 promise 对象，即是：
   ```javascript
   promise2 = promise1.then(onFulfilled, onRejected);
   ```
@@ -33,9 +52,19 @@
   - 如果 onFulfilled 不是函数且 promise1 成功执行， promise2 必须成功执行并返回相同的值
   - 如果 onRejected 不是函数且 promise1 拒绝执行， promise2 必须拒绝执行并返回相同的据因
 
-### 2.3 resolve promise procedure, 即[[Resolve]](promise2, x)过程
+### 2.3 Promise 解决过程，resolve promise procedure, 即 2.2 里[[Resolve]](promise2, x)过程
 
-这个部分基本就是照着规范来写即可，具体规范写在代码备注里。完整代码如下：
+这个部分基本就是照着规范来写即可，具体规范写在代码备注里。
+
+### 备注
+
+指的是引擎，环境和 promise 执行代码。在实践中，此要求确保 onFulfilled 和 onRejected
+能够异步执行，在 then 被调用之后传入事件环，并使用新的栈。这可以使用诸如 setTimeout 或 setImmediate 之类的“宏任务”机制，
+或者使用诸如 MutationObserver 或 process.nextTick 之类的“微任务”机制来实现。
+由于 promise 实现被认为是平台代码，因此它本身可能包含一个任务调度队列或调用处理程序的“trampoline”。
+此处参考了一篇博文的翻译:[非常兔翻译](https://juejin.cn/post/6844903649852784647)
+
+完整代码如下：
 建议阅读顺序， 思路和注释是跟着 Aplus 标准走的：
 
 - constructor
