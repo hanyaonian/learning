@@ -1,12 +1,13 @@
 {
   "compilerOptions": {
-    "target": "es3",
+    "target": "es6",
     "module": "umd",
     "outDir": "./dist",
     "strict": true,
-    "noImplicitAny": true,
+    "noImplicitAny": false,
     "noImplicitReturns": true,
     "skipLibCheck": true,
+    "moduleResolution": "node",
     "suppressImplicitAnyIndexErrors": true // 隐藏一些报错
   },
   "include": ["./**/*"],
