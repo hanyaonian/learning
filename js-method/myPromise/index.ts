@@ -216,22 +216,9 @@ export default class myPromise {
     //2. 如果这个值是thenable（即带有"then" 方法），返回的promise会“跟随”这个thenable的对象，采用它的最终状态；
     //3. 否则返回的promise将以此值完成。(静态值)
     // 此函数将类promise对象的多层嵌套展平。
+    // 已有promise resolve procedure, 无需多与操作
     return new myPromise((resolve, reject) => {
-      if (value instanceof myPromise) {
-        // return value;照中文应该返回这个，实际上下面的才返回正确结果
-        return value.then(resolve, reject);
-      } else if (
-        typeof value === 'object' &&
-        value !== null &&
-        typeof value.then === 'function'
-      ) {
-        return value.then(
-          (val) => resolve(val),
-          (reason) => reject(reason)
-        );
-      } else {
-        resolve(value);
-      }
+      resolve(value);
     });
   }
 

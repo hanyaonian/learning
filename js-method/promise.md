@@ -2,7 +2,7 @@
 
 要实现 Promise，首先要对 Promise 有所了解，并知其标准。
 
-### Promise 简介(MDN)：
+### Promise 简介([MDN](https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/Promise))：
 
 一个 Promise 对象代表一个在这个 promise 被创建出来时不一定已知的值。它让您能够把异步操作最终的成功返回值或者失败原因和相应的处理程序关联起来。 这样使得异步方法可以像同步方法那样返回值：异步方法并不会立即返回最终的值，而是会返回一个 promise，以便在未来某个时候把值交给使用者。
 
@@ -15,9 +15,11 @@
 
 因为 Promise.prototype.then 和 Promise.prototype.catch 方法返回的是 promise， 所以它们可以被链式调用。
 
-### [Promise 规范](https://promisesaplus.com/)
+做前端的小伙伴应该都对这个很熟悉了，下面看看如何去实现一个自己的 Promise ～首先看看 Promise 规范!（当看需求…(o^^o)）
 
-以下节选 2.2 关键翻译内容，作为实现依据。
+### [Promise aplus 规范](https://promisesaplus.com/)
+
+以下翻译了部分规范，方便小伙伴们提前了解代码注释内容。
 
 #### 关键词
 
@@ -298,31 +300,17 @@ export default class myPromise {
 见注释。
 
 ```typescript
-  public static resolve(value): myPromise {
-    // 能简单返回一个resolve的promise吗？参考MDN：
-    //1. 如果这个值是一个 promise ，那么将返回这个 promise ；
-    //1. en: If the value is a promise, that promise is returned;
-    //2. 如果这个值是thenable（即带有"then" 方法），返回的promise会“跟随”这个thenable的对象，采用它的最终状态；
-    //3. 否则返回的promise将以此值完成。(静态值)
-    // 此函数将类promise对象的多层嵌套展平。
-    return new myPromise((resolve, reject) => {
-      if (value instanceof myPromise) {
-        // return value;照中文应该返回这个，实际上下面的才返回正确结果
-        return value.then(resolve, reject);
-      } else if (
-        typeof value === 'object' &&
-        value !== null &&
-        typeof value.then === 'function'
-      ) {
-        return value.then(
-          (val) => resolve(val),
-          (reason) => reject(reason)
-        );
-      } else {
-        resolve(value);
-      }
-    });
-  }
+public static resolve(value): myPromise {
+  // 能简单返回一个resolve的promise吗？参考MDN：
+  //1. 如果这个值是一个 promise ，那么将返回这个 promise ；
+  //1. en: If the value is a promise, that promise is returned;
+  //2. 如果这个值是thenable（即带有"then" 方法），返回的promise会“跟随”这个thenable的对象，采用它的最终状态；
+  //3. 否则返回的promise将以此值完成。(静态值)
+  // 此函数将类promise对象的多层嵌套展平。
+  return new myPromise((resolve, reject) => {
+    resolve(value);
+  });
+}
 ```
 
 ### 静态方法：Promise.all 实现
