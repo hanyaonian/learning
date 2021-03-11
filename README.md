@@ -1,4 +1,4 @@
-# PLAN
+# 温习计划
 
 ### 计算机网络
 
@@ -22,6 +22,7 @@
   2. [自写 call, apply, bind.](https://github.com/hanyaonian/interview/blob/main/js-method/functionBasic.md)
   3. 自写深拷贝
   4. [自写 Promise](https://github.com/hanyaonian/interview/blob/main/js-method/promise.md)
+  5. [函数柯里化](https://github.com/hanyaonian/interview/blob/main/js-method/curry.md)
 
 ### 运行环境 - Nodejs、浏览器
 
