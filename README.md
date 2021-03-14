@@ -26,13 +26,15 @@
 
 ### 运行环境 - Nodejs、浏览器
 
+- commonjs 与浏览器的模块化差异
+
 ### 数据结构及算法、设计模式
 
 - [leetcode 2 题每日](https://github.com/hanyaonian/leetcode_record)
 - [自写算法](https://github.com/hanyaonian/interview/tree/main/algorithm)
 - 发布订阅模式和观察者模式的异同以及实际应用
 - 熟悉常见的设计模式
-  1. 自写发布订阅 emitter
+  1. [自写发布订阅 emitter](https://github.com/hanyaonian/interview/tree/main/design-pattern/emitter.ts)
   2. 自写简易中间件
 
 ### web 框架
