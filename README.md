@@ -13,7 +13,7 @@
 
 - [基础：红宝书学习内容小结](https://github.com/hanyaonian/interview/tree/main/js-basic)
 - 变量和类型问题
-- 原型和原型链
+- [原型和原型链](https://github.com/hanyaonian/interview/blob/main/js-basic/prototype.md)
 - 作用域和闭包
 - [执行机制](https://github.com/hanyaonian/interview/blob/main/js-basic/eventloop.md)
 - 语法和 API
