@@ -1,6 +1,28 @@
 ## 理解 JavaScript 原型与继承
 
-最近第一次面试，很多知识点属于一知半解的状态，只能乱猜答不出来。其中，原型这块以前是看过，但是却是不够熟悉导致很多内容想不起来只能乱猜。那么现在来重新温习一下！
+最近第一次面试，很多知识点属于一知半解的状态，只能乱猜答不出来。其中，原型这块以前是看过，但是可以说完全不熟悉了。面试题长这样：
+
+```js
+function A();
+let a = new A();
+
+a.__proto__ // A.prototype
+A.__proto__ //？
+
+Function.__proto__ //？
+Object.__proto__ //？
+A.prototype.__proto__ //？
+Function.prototype.__proto__ //？
+Object.prototype.__proto__ //？
+```
+
+ok, good. 日常工作中完全没使用过。回忆一下，关于这块我懂什么呢？
+
+- 对象上没有的属性回到原型链上去找
+- 原型方法实例可以用
+- 。。。其他不知道了
+
+那么现在来重新温习一下！
 
 ### 原型- prototype 简介(MDN)
 
@@ -10,9 +32,9 @@ Object.prototype 属性表示 Object 的原型对象。
 
 改变 Object 原型，会通过原型链改变所有对象；除非在原型链中进一步覆盖受这些变化影响的属性和方法。这提供了一个非常强大的、但有潜在危险的机制来覆盖或扩展对象行为。
 
-#### 原型模式的几个要点（红书）
+#### 原型模式（红书）
 
-1. 每个函数都会创建一个 prototype 实例，prototype 是一个对象。这个就是通过调用构造函数创建的对象的原型。
+1. 每个函数都会创建一个 prototype 实例，prototype 是一个对象，是通过调用构造函数创建的对象的原型。
 
 ```js
 function A() {}
@@ -20,18 +42,19 @@ A.prototype.haha = function () {
   console.log('haha');
 };
 let a = new A();
-a.haha();
+a.haha(); //实例调用原型方法
 ```
 
 2. 使用原型模式定义的属性和方法是由所有实例共享的.
 
 ```js
 // 在1.的基础上加入代码
+// 增加原型属性obj，prototype上的是原型属性，大伙共享
 A.prototype.obj = { name: 'A' };
 let a = new A();
 let b = new A();
-b.obj.name = 'B';
 b.obj === a.obj; // true
+b.obj.name = 'B';
 console.log(a.obj); // { name: 'B' }
 ```
 
@@ -79,9 +102,10 @@ Object.getPrototypeOf(b) === A.prototype; // true
 A.prototype.isPrototypeOf(b); // true
 ```
 
-- Object.setPrototypeOf(arg1, arg2). 这方法可以将 arg1 变为 arg2 对象的\[\[prototype\]\]写入新值.
-- **important** 但是这个方法贼垃圾，红宝书上说用这个方法会导致严重性能影响
+- Object.setPrototypeOf(arg1, arg2). 这方法可以将 arg1 变为 arg2 对象的 prototype 指针写入新值.
+- **important！：** 但是这个方法贼垃圾，红宝书上说用这个方法会导致严重性能影响
 - 应该用 Object.create(arg)来创建对象与指定原型
+  关于 Object.setPrototypeOf(arg1, arg2)的 demo 代码如下
 
 ```js
 let b = new A();
@@ -89,7 +113,7 @@ let c = new A();
 let d = {
   haha() {}
 };
-c.__proto__ === b; // true
+c.__proto__ === b.__proto__; // true
 Object.setPrototypeOf(c, d);
 c.__proto__ === d; // true
 ```
@@ -113,9 +137,12 @@ a.hasOwnProperty('haha'); // false
 
 - Object.keys(obj) 枚举所有 obj 上的实例属性，不包括原型上的属性。
 
-### 继承
+## 继承
 
-继承，主要是通过原型链实现的。
+继承，主要是通过原型链实现的。下面看看继承的主要方式。
+
+### 一.原型链继承
+
 如果一个构造函数的原型，是另一个类型的实例，那么该构造函数的原型本身有个内部指针指向另一个原型，另一个原型也有一个指针指向另一个构造函数，这样实例和原型之间构造了一条原型链。
 
 1. 原型链 demo：
@@ -170,3 +197,104 @@ let s2 = new son();
 s1.obj.name = 'step-dad';
 console.log(s2.obj); // { name: 'step-dad' }
 ```
+
+### 二. 盗用构造函数（对象伪装/经典继承）
+
+这种方式很简单，可以解决原型包含引用值引发的继承问题。这样，可以继承到父类上的实例属性。
+问题在于，无法继承父类的原型上定义的方法和属性。
+
+```js
+// 定义父类的实例属性
+function superClass() {
+  this.obj = { name: 'dad' };
+}
+// 定义父类的原型属性与原型方法
+superClass.prototype.method = function () {
+  console.log('super method');
+};
+superClass.prototype.stuff = { name: 'prototype stuff' };
+function sub() {
+  superClass.call(this);
+  // 等于在son的上下文里执行了 this.obj = {}...
+  // 这里的obj会是新的属于son的船新的实例属性，实例属性哦
+}
+let s1 = new sub();
+let s2 = new sub();
+let super1 = new superClass();
+s1.obj.name = 'sub1';
+console.log(s1.obj === s2.obj, s2.obj === super1.obj);
+// false false
+console.log(s1.obj, s2.obj, super1.obj);
+// sub1, dad, dad
+console.log(s1.method, s1.stuff);
+// undefined undefined
+```
+
+### 三. 组合继承（伪经典继承）
+
+即是 2、3 两种方式的组合。既通过原型链继承原型上的方法，也通过经典继承/盗用构造函数去继承实例属性和方法。
+
+```js
+// 上一段盗用构造函数的demo代码中加上：
+sub.prototype = new superClass();
+let s2 = new sub();
+console.log(s2.method, s2.stuff);
+// good! 这样都可以访问到了，实例属性也有！
+```
+
+### 四. 原型式继承
+
+详见方法 Object.create();
+
+### 五. 寄生式继承
+
+知其概念即可，相当于先实现一个继承函数，然后再加强/定制对象，然后再返回对象。
+
+```js
+function createObj(origin) {
+  // 浅拷贝
+  let clone = object(origin);
+  clone.addedMethod = function () {
+    console.log('special method');
+  };
+  return clone;
+}
+```
+
+### 六. 寄生式组合继承（这个没理解，书本 8.3.6）
+
+寄生式组合继承是引用类型继承的最佳模式。
+通过盗用构造函数继承属性，但使用混合式原型链继承方法。->寄生式继承来继承父类原型，返回新对象赋值给子类原型。
+
+```js
+function inheritPrototype(sub, sup) {
+  let prototype = object(sup.prototype); //创建对象
+  // 重写原型会导致constructor丢失，重新指回去
+  prototype.constructor = sub;
+  sub.prototype = prototype;
+}
+```
+
+#### 回过头再看面试题(原型链相关)
+
+温习完红宝书了，那么该看一看面试题的答案自己现在能不能写出来了：
+
+```js
+function A();
+let a = new A();
+
+a.__proto__ // A.prototype
+A.__proto__ // Function.prototype, 是Object
+
+Function.__proto__ // Function.prototype, Function instanceof Function -> true
+Object.__proto__ // Function.prototype， Object instanceof Function -> true
+A.prototype.__proto__ // Function 错了X，是 Object.prototype
+Function.prototype.__proto__ // null 错了X，是 Object.prototype
+Object.prototype.__proto__   // null
+```
+
+好的还是错了 5、6 两个！想一想可以理解：
+A.prototype.\_\_proto\_\_ 解析一下：A.prototype 是一个 Object，上面没有了，所以 A.prototype 的\_\_proto\_\_是 Object.prototype（构造函数的 prototype）
+Function.prototype.\_\_proto\_\_, 同理，Function.prototype 是个 object，再往上也没有了。
+
+#### 好的，也没有白复习，起码从一头雾水到知道一部分了。。。希望对面试的小伙伴们有帮助！

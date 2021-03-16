@@ -17,10 +17,11 @@ export default function emitter(pmap?: eventMap) {
   const map = pmap || new Map<string, Function[]>();
   return {
     // 触发任务, 使用es6的剩余参数可以减少处理
-    emit(event: string, ...args: Function[]) {
+    // fix: 不应该使用剩余参数：这样传空会导致异常。仅接受一个参数/undefined为佳。
+    emit(event: string, arg: any) {
       let sub = map.get(event) || [];
       sub.slice().forEach((func) => {
-        func(...args);
+        func(arg);
       });
     },
     // 事件发生时，注册了的选手都会收到消息并且调用注册的handler
