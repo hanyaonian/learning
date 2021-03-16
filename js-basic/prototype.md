@@ -1,6 +1,6 @@
 ## 理解 JavaScript 原型与继承
 
-今天第一次面试，很多知识点属于一知半解的状态，甚至只能乱猜答不出来。其中，原型这块以前是看过，但是却是一点也想不起来只能乱猜。那么现在来重新温习一下！
+最近第一次面试，很多知识点属于一知半解的状态，只能乱猜答不出来。其中，原型这块以前是看过，但是却是不够熟悉导致很多内容想不起来只能乱猜。那么现在来重新温习一下！
 
 ### 原型- prototype 简介(MDN)
 
@@ -111,6 +111,62 @@ a.hasOwnProperty('haha'); // false
 // 可以结合这两个特性，判断一个属性是否在原型链上
 ```
 
-- Object.keys(obj) 枚举所有 obj 上的实例属性，不包括原型上的属性
+- Object.keys(obj) 枚举所有 obj 上的实例属性，不包括原型上的属性。
 
 ### 继承
+
+继承，主要是通过原型链实现的。
+如果一个构造函数的原型，是另一个类型的实例，那么该构造函数的原型本身有个内部指针指向另一个原型，另一个原型也有一个指针指向另一个构造函数，这样实例和原型之间构造了一条原型链。
+
+1. 原型链 demo：
+
+```js
+function dad() {}
+dad.prototype.name = 'dad';
+dad.prototype.sayHi = function () {
+  console.log(this.name);
+};
+function son() {}
+// 构造原型链
+son.prototype = new dad();
+son.prototype.sonName = 'Son';
+son.prototype.sonHi = function () {
+  console.log(this.sonName);
+};
+let d = new dad();
+let s = new son();
+s.sayHi(); // dad，继承dad的方法
+s.sonHi(); // son，自己的实例方法
+d.sayHi(); // dad
+//dad.sonHi(); //error: sonHi not a function
+```
+
+2. 实现的关键在于，子类没有使用默认原型，而是使用了父类的实例，这样一来不仅可以获取到父类的属性和方法，也能和父类的原型挂上钩。即使说，读取实例属性时，如果没有在找到该属性，就会在其原型上搜索，
+3. 默认原型：所有的引用类型都继承自 Object
+4. 原型与实例的关系可以通过以下两种方法确定：
+   - instanceof (原型链中是否包含构造函数的原型, right-handside 得是 callable 的构造函数)
+   - isPrototypeOf(), 原型链中的每一个原型都可以调用此方法
+   ```js
+   s instance of dad; // true
+   s instance of Object; // true
+   dad.prototype.isPrototypeOf(s); // true
+   // ...
+   ```
+5. 原型链中属性/方法都是所有实例共享的，所以属性一般都在构造函数中定义（这样就是实例中属性）。但通过原型链继承，用于继承的实例的实例属性会变成子类的原型属性，并且在子类的所有实例中共享。那么，还是要在子类型的构造函数里重新定义实例属性。
+
+```js
+function dad() {}
+dad.prototype.obj = {
+  name: 'dad'
+};
+dad.prototype.sayHi = function () {
+  console.log(this.obj);
+};
+function son() {}
+// 构造原型链
+son.prototype = new dad();
+let s1 = new son();
+let s2 = new son();
+s1.obj.name = 'step-dad';
+console.log(s2.obj); // { name: 'step-dad' }
+```
