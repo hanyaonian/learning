@@ -288,12 +288,12 @@ A.__proto__ // Function.prototype, 是Object
 
 Function.__proto__ // Function.prototype, Function instanceof Function -> true
 Object.__proto__ // Function.prototype， Object instanceof Function -> true
-A.prototype.__proto__ // Function 错了X，是 Object.prototype
-Function.prototype.__proto__ // null 错了X，是 Object.prototype
+A.prototype.__proto__ //  Object.prototype
+Function.prototype.__proto__ // Object.prototype
 Object.prototype.__proto__   // null
 ```
 
-好的还是错了 5、6 两个！想一想可以理解：
+5, 6 仔细再想一想可以理解：
 A.prototype.\_\_proto\_\_ 解析一下：A.prototype 是一个 Object，上面没有了，所以 A.prototype 的\_\_proto\_\_是 Object.prototype（构造函数的 prototype）
 Function.prototype.\_\_proto\_\_, 同理，Function.prototype 是个 object，再往上也没有了。
 
