@@ -17,8 +17,9 @@
 - 作用域和闭包
 - [执行机制](https://github.com/hanyaonian/interview/blob/main/js-basic/eventloop.md)
 - 语法和 API
+- [正则表达式](https://github.com/hanyaonian/interview/tree/main/js-basic/regexp.md)
 - [自写 API](https://github.com/hanyaonian/interview/tree/main/api)
-  1. 自写 map、filter
+  1. [自写 map、filter](https://github.com/hanyaonian/interview/blob/main/js-method/arrMethod.md)
   2. [自写 call, apply, bind.](https://github.com/hanyaonian/interview/blob/main/js-method/functionBasic.md)
   3. 自写深拷贝
   4. [自写 Promise](https://github.com/hanyaonian/interview/blob/main/js-method/promise.md)
@@ -30,7 +31,7 @@
 
 ### 数据结构及算法、设计模式
 
-- [leetcode 2 题每日](https://github.com/hanyaonian/leetcode_record)
+- [leetcode 1 题每日](https://github.com/hanyaonian/leetcode_record)
 - [自写算法](https://github.com/hanyaonian/interview/tree/main/algorithm)
 - 发布订阅模式和观察者模式的异同以及实际应用
 - 熟悉常见的设计模式
@@ -40,6 +41,13 @@
 ### web 框架
 
 - Vue 生态圈及重点库原理理解
+
+  1. vuex 原理
+  2. diff 方法
+  3. 响应式（依赖收集、事件分发）
+
+- Flutter (下半年)
+- React (下半年)
 
 ### 工程化 - 性能优化，部署，CI/CD
 
