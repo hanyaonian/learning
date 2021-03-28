@@ -2,11 +2,11 @@
 
 ### 计算机网络
 
-- TCP/UDP 相关内容
-- DNS 相关：过程、优化
+- [TCP/UDP 相关内容](https://github.com/hanyaonian/interview/blob/main/computer-network/tcpudp.md)
+- [DNS 相关：过程、优化](<(https://github.com/hanyaonian/interview/blob/main/computer-network/dns.md)>)
 - [HTTP1.0、HTTP1.1、HTTP2、HTTP3](https://github.com/hanyaonian/interview/blob/main/computer-network/http1.1-http3.md)
 - WebSocket
-- CDN 作用及原理
+- [CDN 作用及原理](https://github.com/hanyaonian/interview/blob/main/computer-network/cdn.md)
 - [https](https://github.com/hanyaonian/interview/blob/main/computer-network/https.md)
 
 ### 编程语言
