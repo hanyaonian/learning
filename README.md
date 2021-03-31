@@ -69,5 +69,11 @@
 - CSRF
 - 页面劫持
 
+### 部署及站点运维
+
+- GA (数据收集与分析)
+- Sentry(错误收集)
+- docker
+
 参考：
 http://www.conardli.top/blog/article/%E7%BB%BC%E5%90%88/%E3%80%90%E8%87%AA%E6%A3%80%E3%80%91%E5%89%8D%E7%AB%AF%E7%9F%A5%E8%AF%86%E6%B8%85%E5%8D%95.html#%E5%8F%98%E9%87%8F%E5%92%8C%E7%B1%BB%E5%9E%8B
