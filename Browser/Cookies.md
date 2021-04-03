@@ -27,10 +27,9 @@ SameSite Cookie 允许服务器要求某个 cookie 在跨站请求时不会被�
 
 通过 Document.cookie 属性可创建新的 Cookie，也可通过该属性访问非 HttpOnly 标记的 Cookie。
 
-````js
+```js
 document.cookie = 'yummy_cookie=choco';
 document.cookie = 'tasty_cookie=strawberry';
 console.log(document.cookie);
 // logs "yummy_cookie=choco; tasty_cookie=strawberry"
-```s
-````
+```
