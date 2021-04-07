@@ -37,4 +37,16 @@ npm install 和 npm ci 的主要区别是()：
 #### Babel 相关(该部分内容实际接触较少)
 
 - ##### 依赖代码不兼容，babel compile fail
-- 默认情况下 babel-loader 会忽略 node_modules 的代码，如果想处理依赖，需要通过 transpileDependencies 去进行转译依赖。（babel 配置内容中可以配置 sourceType + overrides 去进行一个 module/require 依赖处理）
+- 默认情况下 babel-loader 会忽略 node_modules 的代码，如果想处理依赖，需要通过 transpileDependencies 去进行转译依赖。（babel 配置内容中可以配置 sourceType: unambiguous + overrides 去进行一个 module/require 依赖处理）
+
+- ##### 按需打包实现(项目已基于 babel-plugin-import 实现)
+
+1. 使用 es module 的 tree shaking 方案，构建工具打包时按需打包(package.json 中注意设置 sideEffects)
+2. 使用 babel-plugin-import 插件完成按需打包
+
+- ##### 代码拆分&按需加载
+- webpack
+  1.  入口配置手动分割代码（如项目实践中的报表分 entry 进入）
+  2.  动态导入支持：() => import('url...'), 或者 webpackMode: lazy
+      > 最终是 webpack 转换成一个 promise 数组，然后通过 jsonp 的形式去加载模块内容，加载成功就把 promise 数组对应的内容填上，其他也引用的就不需要再异步加载。
+  3.  splitChunk 提取公共代码(避免重复打包，提升代码利用率，webpack 一般是自动配置，不建议自己操作。。。)
