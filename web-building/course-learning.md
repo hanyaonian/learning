@@ -34,4 +34,7 @@ npm install 和 npm ci 的主要区别是()：
 4. 如果有特定版本依赖需求，建议**peerDependencies**
    > peerDependencies: 如果某个 package 把我列为依赖的话，那么那个 package 也必需应该有对 PackageB 的依赖。这样就可以保证上下层对依赖的统一。
 
-#### Babel 相关
+#### Babel 相关(该部分内容实际接触较少)
+
+- ##### 依赖代码不兼容，babel compile fail
+- 默认情况下 babel-loader 会忽略 node_modules 的代码，如果想处理依赖，需要通过 transpileDependencies 去进行转译依赖。（babel 配置内容中可以配置 sourceType + overrides 去进行一个 module/require 依赖处理）
