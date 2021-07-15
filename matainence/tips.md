@@ -42,3 +42,9 @@ export function weconsole(...args) {
 1. dom 结构作为字符串存储，插入到 html 之后，获取到其元素再做对应的组件化操作；
 2. 使用 Parcel 进行快速的原型 demo 开发；
 3. 通过 rollup 进行代码打包，可以有效的减少代码量；
+
+#### 2021-7
+
+工作有点忙，回来以后疲于玩乐，忘记学习了，记录一下近期的收获：
+Protocol Buffer : google 的一种数据协议，用来前后端交互可以提升传输的性能，并且统一协议（多端同构）
+Transition group : 在 vue 中进行列表过渡可以有效提升用户体验；
