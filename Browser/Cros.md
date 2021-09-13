@@ -1,0 +1,1 @@
+- 同源 iframe 现在也不可以操作 iframe 里的元素了；可以获取到 webcontent，但是不可以读 document 等。 2021-9-13
