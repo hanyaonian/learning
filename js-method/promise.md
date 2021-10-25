@@ -1,4 +1,4 @@
-### [源码地址](https://github.com/hanyaonian/interview/tree/main/js-method/myPromise)
+### [源码地址](https://github.com/hanyaonian/web-dev-learning/tree/main/js-method/myPromise)
 
 要实现 Promise，首先要对 Promise 有所了解，并知其标准。
 
