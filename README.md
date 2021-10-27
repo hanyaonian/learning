@@ -46,8 +46,8 @@
   2. diff 方法
   3. 响应式（依赖收集、事件分发）
 
-- Flutter (下半年)
-- React (下半年)
+- Flutter
+- React
 
 ### 工程化 - 性能优化，部署，CI/CD
 

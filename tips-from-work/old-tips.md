@@ -48,3 +48,7 @@ export function weconsole(...args) {
 工作有点忙，回来以后疲于玩乐，忘记学习了，记录一下近期的收获：
 Protocol Buffer : google 的一种数据协议，用来前后端交互可以提升传输的性能，并且统一协议（多端同构）
 Transition group : 在 vue 中进行列表过渡可以有效提升用户体验；
+
+#### 2021-10
+
+监控上报: 监听 window.onerrror、重写 xmlhttprequest 的方法可以实现静态文件、请求相关的内容监控

@@ -59,7 +59,7 @@ sourceMap 是一项将编译、打包、压缩后的代码映射回源代码的�
 有了这份映射文件，我们只需要在我们的压缩代码的最末端加上这句注释，即可让 sourceMap 生效：
 
 ```js
-//# sourceURL=/path/to/file.js.map
+//# sourceURL=/path/to/file.js.map从v
 ```
 
 有了这段注释后，浏览器就会通过 sourceURL 去获取这份映射文件，通过解释器解析后，实现源码和混淆代码之间的映射。因此 sourceMap 其实也是一项需要浏览器支持的技术。
