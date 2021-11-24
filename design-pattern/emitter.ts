@@ -1,14 +1,17 @@
 /**
- * 极简的事件监听方法：
- *
  * const emit = emitter();
- * emit.on('happend', ()=> {
- *   console.log('on happend')
- * })
  *
- * setTimeout(()=> {
- *   emit.emit('happend');
- * })
+ * const someMethod = ()=> {
+ *   console.log('on happend')
+ * }
+ * emit.on('happend', someMethod);
+ *
+ * emit.emit('happend');   // print 'on happend'
+ *
+ * // unsubscribe
+ * emit.unsubscribe('happend', someMethod);
+ * // or simply
+ * emit.unsubscribe('happend');
  */
 
 export type eventMap = Map<string, Function[]>;
@@ -16,15 +19,23 @@ export type eventMap = Map<string, Function[]>;
 export default function emitter(pmap?: eventMap) {
   const map = pmap || new Map<string, Function[]>();
   return {
-    // 触发任务, 使用es6的剩余参数可以减少处理
-    // fix: 不应该使用剩余参数：这样传空会导致异常。仅接受一个参数/undefined为佳。
+    /**
+     * trigger evemt
+     * @param event { String }
+     * @param arg { any }
+     */
     emit(event: string, arg: any) {
       let sub = map.get(event) || [];
       sub.slice().forEach((func) => {
-        func(arg);
+        func(...arg);
       });
     },
-    // 事件发生时，注册了的选手都会收到消息并且调用注册的handler
+
+    /**
+     * register event handler
+     * @param event
+     * @param handler
+     */
     on(event: string, handler: Function) {
       if (map.has(event) === false) {
         map.set(event, [handler]);
@@ -35,9 +46,19 @@ export default function emitter(pmap?: eventMap) {
         }
       }
     },
-    // 取消事件的订阅
-    unsubscribe(event: string, handler: Function) {
+
+    /**
+     * unsubscribe event;
+     * @param event { String }
+     * @param handler { Function }
+     * @returns void
+     */
+    unsubscribe(event: string, handler?: Function) {
       let sub = map.get(event) || [];
+      if (!handler) {
+        map.delete(event);
+        return;
+      }
       let i = sub.indexOf(handler);
       if (i !== -1) {
         sub.splice(i, 1);
