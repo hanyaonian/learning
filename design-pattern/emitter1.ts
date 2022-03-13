@@ -1,4 +1,6 @@
 /**
+ * simple emitter, function based
+ *
  * const emit = emitter();
  *
  * const someMethod = ()=> {

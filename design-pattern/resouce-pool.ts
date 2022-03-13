@@ -1,4 +1,4 @@
-import emit from './emitter';
+import emit from './emitter1';
 
 interface task {
   /** 指代一个资源 */
