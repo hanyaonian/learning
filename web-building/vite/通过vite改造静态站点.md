@@ -101,6 +101,7 @@ function replaceSnippets() {
 ```
 
 移出去的重复html代码放哪呢, 放到`snippets` 文件夹下, 保留其文件名的html后缀，这样你还能享受html的ide的语法高亮.
+当然这个方案和模板引擎差距很大，但是对接手的人来说，他得到的是不需要重新学习模板引擎，又能享受洁净一点的html～
 
 ```html
 <!-- this is file of snippets/privacy-policy.html, this will replace <\!-- @privacy-policy --\> in html file -->
