@@ -24,6 +24,8 @@ docker run {flags} image # -it: attaches us to an interactive tty in the contain
                          # -P: publish all exposed ports to random ports
                          # -p: {local_port}:{container_port}, eg: docker run -p 8888:5000 michael/simple_app
 
+docker container logs {container_name} # show container's log
+
 docker {command} --help  # get commnad help, such as 'run'
 
 docker ps                # shows you all containers that are currently running
@@ -67,4 +69,14 @@ docker run -it -p 3001:3000 michael/nodejs_demo
 # now you can reach this application by localhost:3001!
 ```
 
+### push your image to remote repo
+
+```sh
+docker login
+
+docker push {your_docker_image_name}
+```
+
 ## multiple container
+
+- TODO: change michaelblog into docker-based
