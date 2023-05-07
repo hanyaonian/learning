@@ -1,0 +1,18 @@
+{
+  "name": "express-docker-demo",
+  "version": "0.0.1",
+  "description": "demo about running nodejs application in docker",
+  "main": "index.js",
+  "scripts": {
+    "serve": "node index.js"
+  },
+  "keywords": [
+    "docker demo",
+    "docker node.js"
+  ],
+  "author": "michaelhan",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.18.2"
+  }
+}

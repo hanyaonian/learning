@@ -1,6 +1,6 @@
-## Cookies 学习笔记(MDN)
+# Cookies 学习笔记(MDN)
 
-#### Cookie 的作用域
+## Cookie 的作用域
 
 Domain 和 Path 标识定义了 Cookie 的作用域：即允许 Cookie 应该发送给哪些 URL。
 
@@ -15,7 +15,7 @@ SameSite Cookie 允许服务器要求某个 cookie 在跨站请求时不会被�
 - Strict。浏览器将只在访问相同站点时发送 cookie。（在原有 Cookies 的限制条件上的加强，如上文 “Cookie 的作用域” 所述）
 - Lax。与 Strict 类似，但用户从外部站点导航至 URL 时（例如通过链接）除外。 在新版本浏览器中，为默认选项，Same-site cookies 将会为一些跨站子请求保留，如图片加载或者 frames 的调用，但只有当用户从外部站点导航到 URL 时才会发送。
 
-#### Cookies 的安全性
+## Cookies 的安全性
 
 > - 信息被存在 Cookie 中时，需要明白 cookie 的值时可以被访问，且可以被终端用户所修改的。
 > - 根据应用程序的不同，可能需要使用服务器查找的不透明标识符，或者研究诸如 JSON Web Tokens 之类的替代身份验证/机密机制。
