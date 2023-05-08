@@ -1,8 +1,10 @@
-### [源码地址](https://github.com/hanyaonian/web-dev-learning/tree/main/js-method/myPromise)
+# Build a promise yourself
+
+[源码地址](https://github.com/hanyaonian/web-dev-learning/tree/main/js-method/myPromise)
 
 要实现 Promise，首先要对 Promise 有所了解，并知其标准。
 
-### Promise 简介([MDN](https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/Promise))：
+## Promise 简介([MDN](https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/Promise))
 
 一个 Promise 对象代表一个在这个 promise 被创建出来时不一定已知的值。它让您能够把异步操作最终的成功返回值或者失败原因和相应的处理程序关联起来。 这样使得异步方法可以像同步方法那样返回值：异步方法并不会立即返回最终的值，而是会返回一个 promise，以便在未来某个时候把值交给使用者。
 
@@ -17,11 +19,11 @@
 
 做前端的小伙伴应该都对这个很熟悉了，下面看看如何去实现一个自己的 Promise ～首先看看 Promise 规范!（当看需求…(o^^o)）
 
-### [Promise aplus 规范](https://promisesaplus.com/)
+## [Promise aplus 规范](https://promisesaplus.com/)
 
 以下翻译了部分规范，方便小伙伴们提前了解代码注释内容。
 
-#### 关键词
+### 关键词
 
 - "promise"是具有 then 方法的对象或函数，其行为符合此规范。
 - "thenable"是定义 then 方法的对象或函数。
@@ -37,18 +39,20 @@
 - Fulfilled: 必须拥有一个不可变的终值; 状态不可变
 - Rejected: 必须拥有一个不可变的据因; 状态不可变
 
-#### 2.2 节选，then 部分
+### 2.2 节选，then 部分
 
 - 一个 promise 必须提供一个 then 方法以访问其当前值、终值和据因。
 - promise 的 then 方法接受两个参数（都是可选的）: promise.then(onFulfilled, onRejected), 两个参数是得是函数，如果不是，就忽略掉。
-  1.  onFulfilled, 第一个参数为 promise 的终值 value
-  2.  onRejected, 第一个参数为 promise 的拒因 reason
+  1. onFulfilled, 第一个参数为 promise 的终值 value
+  2. onRejected, 第一个参数为 promise 的拒因 reason
 - （2.2.4）在执行上下文堆栈（execution context）仅包含平台代码之前，不得调用 onFulfilled 和 onRejected 3.1
   - 其实这点想想很清楚的， then 是微任务，只有任务队列里没事了才会走，但因为当时头昏没有看懂这句话什么意思，错误的在将回调函数入栈的时候加了个 settimeout，一直写不对，看了很久没看出原因。
 - then 必须返回一个 promise 对象，即是：
+
   ```javascript
   promise2 = promise1.then(onFulfilled, onRejected);
   ```
+
   - 如果 onFulfilled 或者 onRejected 返回一个值 x ，则运行下面的 Promise 解决过程：[[Resolve]](promise2, x)
   - 如果 onFulfilled 或者 onRejected 抛出一个异常 e ，则 promise2 必须拒绝执行，并返回拒因 e
   - 如果 onFulfilled 不是函数且 promise1 成功执行， promise2 必须成功执行并返回相同的值
@@ -557,8 +561,4 @@ myPromise {
  */
 ```
 
-### 静态方法：Promise.race, Promise.reject...
-
-这两个方法比较简单，附在代码内了，就没有补充测试代码。
-
-### 希望对面试复习的小伙伴们有帮助！
+### 静态方法：Promise.race, Promise.reject

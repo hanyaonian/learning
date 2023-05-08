@@ -1,13 +1,6 @@
-function debounce(fn: Function, time = 500) {
-  let timer: undefined | number;
-  return function (...args: any[]) {
-    clearTimeout(timer);
-    timer = setTimeout(() => {
-      fn(...args);
-    }, time);
-  };
-}
+# Simple throttle in javasript
 
+```ts
 function throttle(fn: Function, time = 500) {
   let preCall: undefined | number;
   return function (...args: any[]) {
@@ -23,3 +16,4 @@ function throttle(fn: Function, time = 500) {
     }
   };
 }
+```
