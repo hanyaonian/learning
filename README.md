@@ -4,4 +4,4 @@
 
 ## Contact me
 
-- [email](mailto@hanyaonian@gmail.com)
+- `hanyaonian@gmail.com`
