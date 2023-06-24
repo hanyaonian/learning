@@ -1,5 +1,6 @@
-#### 回溯模板--伪代码
-````
+# 回溯模板--伪代码
+
+````text
 void backtracking(参数) {
     if (终止条件) {
         存放结果;
@@ -13,6 +14,7 @@ void backtracking(参数) {
     }
 }
 ````
-eg: 
-https://github.com/hanyaonian/leetcode_record/blob/master/46*.js
-https://github.com/hanyaonian/leetcode_record/blob/master/47.js
+
+eg:
+<https://github.com/hanyaonian/leetcode_record/blob/master/46*.js>
+<https://github.com/hanyaonian/leetcode_record/blob/master/47.js>
