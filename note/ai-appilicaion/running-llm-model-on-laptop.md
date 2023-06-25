@@ -1,4 +1,4 @@
-# Run a LLM model on your laptop
+# Run a LLaMA model on your laptop
 
 In this article, I will show you the steps to run a LLaMA in your Mac.
 
@@ -6,7 +6,7 @@ Thanks to the great work by Meta, ggerganov, and the communities ^ ^.
 
 ## Prerequisite
 
-- A Mac with (I dont know the requirement of Windows) silicon chip.
+- A Mac with silicon chip. (I dont know the requirement for Windows/linux)
 - [homebrew](https://brew.sh/)
 
 My laptop: Macbook Air M1 - 16g - 512g.
@@ -42,8 +42,10 @@ cmake --build . --config Release
 - installing python dependencies
 
 ```sh
+# in llama.cpp folder
+
 # create a virtual env
-python3 -m venv venv
+python -m venv venv
 
 # activate venv
 source venv/bin/activate
@@ -53,7 +55,7 @@ source venv/bin/activate
 
 ## 2. prepare weights and convert
 
-- download data (multiple options), and put the weights in the folder `models` in `llama.cpp`
+- download weights data (multiple options), and put the weights in the folder `models` in `llama.cpp`
   0. [official way](https://forms.gle/jk851eBVbX1m5TAv5)
   1. from [pyllama](https://github.com/juncongmoo/pyllama)
   2. Bittorrent, such as [this](https://github.com/shawwn/llama-dl) (it may be removed)
