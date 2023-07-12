@@ -1,6 +1,6 @@
 # Object Oriented Design Pattern: Singleton
 
-We know how to write a Singleton case, it's very simple. Today I found a new way to make it more beautiful in TypeScript.
+We know how to write a Singleton case, it's very simple. Today I found a new way to make it more reliable in TypeScript.
 
 ## Basic
 
@@ -62,25 +62,6 @@ abstract class Singleton {
 with abstract Classes, it is not need to rewrite same logic.
 
 ```ts
-abstract class Singleton {
-  private static instances: Map<string, Singleton> = new Map();
-
-  public static getInstance<T extends Singleton>(this: new () => T) {
-    const classname = this.name;
-    if (!Singleton.instances.has(classname)) {
-      Singleton.instances.set(classname, new this());
-    }
-    return Singleton.instances.get(classname) as T;
-  }
-
-  protected constructor() {
-    if (Singleton.instances.has(this.constructor.name)) {
-      throw new Error('Singleton can not construct twice.');
-    }
-    Singleton.instances.set(this.constructor.name, this);
-  }
-}
-
 class SingletonA extends Singleton {
   // we need a public constructor
   // or you will have this:
@@ -97,3 +78,34 @@ let a2 = SingletonA.getInstance()
 // let a2 = new SingletonA(); error: Singleton can not construct twice.
 console.log(a1 === a2); // true
 ```
+
+## in ES5
+
+Now there are a lot of web application bundler tools that can convert es6 or newer formats into lower version JavaScript, in order to adapt to lower version browsers. 
+
+As an example,  `class` does not exist in es5 or older JavaScript, but the bundler will convert it into an anonymous function to achieve the functionality. The above abstract way for Singleton can not work well, because in anonymous function there is no  class name. We can have the following changes:
+
+```ts
+export abstract class Singleton {
+  // previous code...
+  public static getInstance<T extends Singleton>
+  (this: (new (...args: any[]) => T) &amp; { classname: string }, ...args: any[]): T {
+    const classname = this.classname || this.name;
+    // code...
+  }
+
+  // rest of code...
+}
+```
+
+in sub-classes:
+
+```ts
+class SingletonA extends Singleton {
+  // without it you will have 
+  // "Property 'classname' is missing in type 'typeof SingletonA' but required in type '{ classname: string; }'."
+  static classname = 'SingletonA';
+}
+```
+
+Thanks ^^
