@@ -59,7 +59,7 @@ abstract class Singleton {
 }
 ```
 
-with abstract Classes, it is not need to rewrite same logic.
+with abstract class, it is not need to rewrite same logic.
 
 ```ts
 class SingletonA extends Singleton {
@@ -81,7 +81,7 @@ console.log(a1 === a2); // true
 
 ## in ES5
 
-Now there are a lot of web application bundler tools that can convert es6 or newer formats into lower version JavaScript, in order to adapt to lower version browsers. 
+Now there are a lot of web application bundler tools that can convert es6 or newer formats into lower version JavaScript, in order to adapt to lower version browsers.
 
 As an example,  `class` does not exist in es5 or older JavaScript, but the bundler will convert it into an anonymous function to achieve the functionality. The above abstract way for Singleton can not work well, because in anonymous function there is no  class name. We can have the following changes:
 
@@ -89,7 +89,7 @@ As an example,  `class` does not exist in es5 or older JavaScript, but the bundl
 export abstract class Singleton {
   // previous code...
   public static getInstance<T extends Singleton>
-  (this: (new (...args: any[]) => T) &amp; { classname: string }, ...args: any[]): T {
+  (this: (new (...args: any[]) => T) & { classname: string }, ...args: any[]): T {
     const classname = this.classname || this.name;
     // code...
   }
@@ -107,5 +107,7 @@ class SingletonA extends Singleton {
   static classname = 'SingletonA';
 }
 ```
+
+However, it's not the best way to make it.
 
 Thanks ^^

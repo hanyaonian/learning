@@ -2,6 +2,8 @@ abstract class Singleton {
   private static instances: Map<string, Singleton> = new Map();
 
   public static getInstance<T extends Singleton>(this: new () => T) {
+    // this won't work in es5
+    // or it will have conflict when there are same name classes
     const classname = this.name;
     if (!Singleton.instances.has(classname)) {
       Singleton.instances.set(classname, new this());
