@@ -79,7 +79,7 @@ let a2 = SingletonA.getInstance()
 console.log(a1 === a2); // true
 ```
 
-## in ES5
+### Issue 1: not working in ES5
 
 Now there are a lot of web application bundler tools that can convert es6 or newer formats into lower version JavaScript, in order to adapt to lower version browsers.
 
@@ -108,6 +108,46 @@ class SingletonA extends Singleton {
 }
 ```
 
-However, it's not the best way to make it.
+### Issue 2: Subclass's constructor become public
+
+I do not know how to fix it.
+
+## Thoughts
+
+The way we fixed in abstract mode can refer to this [link](https://www.typescriptlang.org/docs/handbook/2/classes.html)
+
+And here's a sample code (It is not recommend to apply sub-class's attribute in father-class)
+
+```ts
+class Father {
+  public someFuncNeedKey<T extends Father>(this: T) {
+    // "Sub init", but:
+    // no name in es5 anonymous function
+    console.log(`${this.constructor.name} init`);
+  }
+  // a way to fix:
+  public someFuncNeedKey2<T extends Father>(this: T & { customclassname: string }) {
+    console.log(`${this.customclassname} init`);
+  }
+  constructor() { }
+}
+
+class Sub extends Father {
+  // uncomment me: to fix error
+  // public customclassname = 'Sub';
+  // or
+  // get customclassname() { return 'Sub' }
+}
+
+const sub = new Sub();
+
+// error: Property 'customclassname' is missing in type 'Father' but required in type '{ customclassname: string; }'.
+// sub.someFuncNeedKey2();
+
+// undefined in es5
+sub.someFuncNeedKey();
+```
+
+However, it's not the best way to create a singleton.
 
 Thanks ^^
