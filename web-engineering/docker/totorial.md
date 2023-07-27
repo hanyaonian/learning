@@ -15,7 +15,7 @@ docker pull {image}:{version} # pull a docker image with version
 
 docker images            # list all images
 
-docker run image         # start docker container
+docker run {image}       # start docker container
 
 docker run {flags} image # -it: attaches us to an interactive tty in the container.
                          # -d: will detach the terminal
@@ -59,6 +59,29 @@ docker build {location}  # build an docker image, eg: docker build ./demo/
 ## create a docker images
 
 - check `demo/Dockerfile`
+
+```dockerfile
+# base image
+FROM node:18
+
+# working directory
+# set a directory for the app
+WORKDIR /usr/src/app
+
+# copy all the files to the container
+COPY . .
+
+# install dependencies
+RUN npm install
+
+# define the port number the container should expose
+EXPOSE 3000
+
+# run the command
+# command for running the application
+CMD ["npm", "run", "serve"]
+```
+
 - check below, sample shell
 
 ```sh
@@ -68,6 +91,17 @@ docker run -it -p 3001:3000 michael/nodejs_demo
 
 # now you can reach this application by localhost:3001!
 ```
+
+### develop in a container
+
+it's useful when you need to develop with some complicated dependencies, with official image it would be much easier, e.g. puppeteer.
+
+1. Install VsCode plugin:
+- Docker
+- Remote - Containers
+
+2. Select plugins - Docker
+3. Right click running container, select 'Attach Visual Studio Code'
 
 ### push your image to remote repo
 
