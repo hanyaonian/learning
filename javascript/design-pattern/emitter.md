@@ -1,3 +1,34 @@
+# Emitter
+
+## Emitter types in TS
+
+Custom events in typescript
+
+```ts
+import { EventEmitter } from 'events';
+
+interface CustomEvents {
+  event1: () => void;
+  event2: (text: string) => void;
+}
+
+class CustomClass extends EventEmitter {
+  on<T extends keyof CustomEvents>(event: T, listener: CustomEvents[T]) {
+    super.on(event, listener);
+    return this;
+  }
+}
+
+const a = new CustomClass();
+
+// typescript hint works
+a.on('event1', () => {});
+a.on('event2', (text) => {});
+```
+
+## simple class-based emitter example
+
+```ts
 /**
  * simple event emitter, class-based
  */
@@ -53,3 +84,4 @@ export default class Emitter {
     }
   }
 }
+```
