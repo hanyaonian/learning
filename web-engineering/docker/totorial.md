@@ -97,6 +97,7 @@ docker run -it -p 3001:3000 michael/nodejs_demo
 it's useful when you need to develop with some complicated dependencies, with official image it would be much easier, e.g. puppeteer.
 
 1. Install VsCode plugin:
+
 - Docker
 - Remote - Containers
 
@@ -111,6 +112,55 @@ docker login
 docker push {your_docker_image_name}
 ```
 
-## multiple container
+## multiple container: Docker compose
 
-- TODO: change michaelblog into docker-based
+- see [documentation](https://docs.docker.com/compose/)
+- demo in `./demo-compose`
+
+### example compose config
+
+sample:
+
+```yml
+services:
+  nodesvr:
+    image: node:latest
+    container_name: nodesvr_demo
+    restart: always
+    command: sh -c "npm install && npm run serve"
+    ports:
+      - 3001:3000
+    working_dir: /app
+    volumes:
+      - ./svr:/app
+  web:
+    build: ./web
+    container_name: nginx_web
+    restart: always
+    ports:
+      - 3000:80
+```
+
+- `volumes` directive in docker-compose, `{xx}:{xx}`, the colon `(:)` is to separate two paths.
+the first path is the path on the host machine
+the second path is the path inside the container.
+
+In this way, when the container starts, the specified path on the host will be mounted to the specified path in the container, so that the container can access files or directories on the host.
+
+- `build` identify a Dockerfile postion in the context.
+
+### exmaple commands
+
+```sh
+# start compose
+docker compose up
+
+# detached mode
+docker compose up -d
+
+# list docker containers in compose
+docker compose ps
+
+# stop compose
+docker compose stop
+```
