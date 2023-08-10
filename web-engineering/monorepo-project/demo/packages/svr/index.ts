@@ -5,7 +5,7 @@ let counter = 0;
 const app = express();
 
 app.get('*', (_req, res) => {
-  res.end(`count ${counter} times`);
+  res.end(`count ${counter++} times`);
 });
 
 app.listen(config.SERVER_PORT, () => {

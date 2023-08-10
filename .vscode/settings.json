@@ -1,0 +1,9 @@
+{
+    "explorer.openEditors.visible": 2,
+    "editor.formatOnSave": true,
+    "eslint.run": "onType",
+    "eslint.enable": true,
+    "[javascript]": {
+        "editor.defaultFormatter": "esbenp.prettier-vscode"
+    },
+}

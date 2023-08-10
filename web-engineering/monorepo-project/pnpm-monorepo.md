@@ -81,3 +81,5 @@ check the example in `./package.json`
 
 - [parallel](https://pnpm.io/cli/run#--parallel)
 - [workspace](https://pnpm.io/workspaces)
+
+Check the example, Now you have a basic monorepo project!
