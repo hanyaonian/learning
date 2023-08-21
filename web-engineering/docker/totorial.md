@@ -17,12 +17,14 @@ docker images            # list all images
 
 docker run {image}       # start docker container
 
-docker run {flags} image # -it: attaches us to an interactive tty in the container.
-                         # -d: will detach the terminal
-                         # --rm:  delete after runing
-                         # --name: renmae containers
-                         # -P: publish all exposed ports to random ports
-                         # -p: {local_port}:{container_port}, eg: docker run -p 8888:5000 michael/simple_app
+docker run {flags} {image} # -it: attaches us to an interactive tty in the container.
+                           # -d: will detach the terminal
+                           # --rm:  delete after runing
+                           # --name: rename containers
+                           # -P: publish all exposed ports to random ports
+                           # -p: {local_port}:{container_port}, eg: docker run -p 8888:5000 michael/simple_app
+
+docker exec {container_id} {flags} bash # -it attaches us to an interactive tty in the container.
 
 docker container logs {container_name} # show container's log
 
