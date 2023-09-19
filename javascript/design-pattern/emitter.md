@@ -26,6 +26,41 @@ a.on('event1', () => {});
 a.on('event2', (text) => {});
 ```
 
+in popular npm package `eventemitter3`, this won't work:
+
+```ts
+import EventEmitter from "eventemitter3";
+/**
+ * check the declartion: EventEmitter already use generics
+ * 
+ * declare class EventEmitter<
+ *    EventTypes extends EventEmitter.ValidEventTypes = string | symbol,
+ *    Context extends any = any
+ *  >
+ * 
+ * eventNames(): Array<EventEmitter.EventNames<EventTypes>>;
+ * 
+ * on<T extends EventEmitter.EventNames<EventTypes>>(
+    event: T,
+    fn: EventEmitter.EventListener<EventTypes, T>,
+    context?: Context
+  ): this;
+ */
+
+// so, we should change it into:
+class CustomClass extends EventEmitter<keyof CustomEvents> {
+  constructor() {
+    super();
+  }
+
+  on<T extends keyof CustomEvents>(event: T, listener: CustomEvents[T]) {
+    super.on(event, listener);
+    return this;
+  }
+}
+// it works
+```
+
 ## simple class-based emitter example
 
 ```ts
