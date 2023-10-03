@@ -83,3 +83,74 @@ check the example in `./package.json`
 - [workspace](https://pnpm.io/workspaces)
 
 Check the example, Now you have a basic monorepo project!
+
+## Examples
+
+### Demo
+
+check `demo` under this directory
+
+### Boilerplate
+
+check `boilerplate` under this directory. Including:
+
+- husky (pre-commit, commitlint)
+- lintstage (eslint, stylelint)
+- code style (prettier, commitlint)
+
+#### step-by-step starting a team-first monorepo project
+
+```sh
+# initializing pnpm
+pnpm init
+# naming project, description, etc.
+# ...
+
+# installing husky & hooks-related dependencies
+pnpm add husky @commitlint/config-conventional -w -D
+
+# exec hook: `pnpm exec` is same as `npx`
+pnpm exec husky add .husky/pre-commit "TODO:"
+```
+
+with `vscode`, here's the recommoned plugins and setting for teamwork. They are listed in `.vscode`.
+
+in `plugins.json`:
+
+```json
+{
+  "recommendations": [
+    "esbenp.prettier-vscode",
+    "wayou.vscode-todo-highlight",
+    "dbaeumer.vscode-eslint",
+    "stylelint.vscode-stylelint",
+    "davidanson.vscode-markdownlint"
+  ]
+}
+```
+
+in `settings.json`:
+
+```json
+{
+  "editor.rulers": [120],
+  "explorer.openEditors.visible": 2,
+  "files.eol": "\n",
+  "editor.formatOnSave": true,
+  "editor.defaultFormatter": "esbenp.prettier-vscode",
+  "editor.codeActionsOnSave": {
+    "source.fixAll.eslint": true
+  },
+  "eslint.format.enable": true,
+  "eslint.run": "onType",
+  "eslint.enable": true,
+  "eslint.options": {
+    "configFile": "./**/.eslintrc.js"
+  },
+  // others...
+  "[markdown]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  }
+}
+
+```
