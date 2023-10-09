@@ -169,3 +169,5 @@ in `lint-stage`, you should add something like behind in package.json
     "*.{js,ts}": "pnpm exec eslint --cache --fix"
   },
 ```
+
+for `eslint` configs, check `https://typescript-eslint.io/linting/typed-linting/monorepos`

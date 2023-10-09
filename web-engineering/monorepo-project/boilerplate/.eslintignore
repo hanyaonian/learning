@@ -3,3 +3,5 @@ dist/
 pnpm-lock.yaml
 
 *.config.js
+.eslintrc.js
+.eslintrc.cjs
