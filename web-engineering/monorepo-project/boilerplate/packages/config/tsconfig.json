@@ -3,8 +3,9 @@
     "outDir": "./dist",
     "declaration": true,
     "strict": true,
-    "declarationMap": true,
+    "module": "ESNext",
+    "declarationMap": true
   },
-  "include": ["./*"],
+  "include": ["./*.ts"],
   "exclude": ["**/node_modules", "./dist/**/*"]
 }

@@ -1,0 +1,31 @@
+{
+  "name": "pnpm-boilerplate",
+  "version": "1.0.0",
+  "description": "pnpm monoprepo project boilerplate",
+  "scripts": {
+    "dev": "pnpm --parallel --filter './packages/**' dev",
+    "build": "pnpm --parallel --filter './packages/**' build",
+    "format": "pnpm --parallel --filter './packages/**' format",
+    "prepare": "husky install"
+  },
+  "lint-staged": {
+    "*.{js,ts}": "pnpm exec eslint --cache --fix",
+    "*.{css,scss,sass}": "stylelint"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@commitlint/cli": "^17.7.2",
+    "@commitlint/config-conventional": "^17.7.0",
+    "@typescript-eslint/parser": "^6.7.4",
+    "eslint": "^8.51.0",
+    "husky": "^8.0.3",
+    "lint-staged": "^14.0.1",
+    "prettier": "^3.0.3",
+    "typescript": "^5.2.2"
+  },
+  "dependencies": {
+    "cross-env": "^7.0.3"
+  }
+}

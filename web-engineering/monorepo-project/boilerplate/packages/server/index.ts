@@ -1,10 +1,10 @@
-import express from 'express';
-import config from 'config';
+import express from "express";
+import config from "config";
 
 let counter = 0;
 const app = express();
 
-app.get('*', (_req, res) => {
+app.get("*", (_req, res) => {
   res.end(`count ${counter++} times`);
 });
 

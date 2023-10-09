@@ -4,7 +4,8 @@
   "description": "",
   "main": "index.ts",
   "scripts": {
-    "dev": "tsx ./index.ts"
+    "dev": "tsx ./index.ts",
+    "format": "pnpm exec prettier . --write"
   },
   "keywords": [],
   "author": "",

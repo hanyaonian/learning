@@ -1,5 +1,7 @@
 # pnpm monorepo project
 
+inspired by `weifang`
+
 Rencently I have joined a project that use `pnpm` and gained some practical experience about it.
 
 It solve some problem effectively. Here, I would document some notes and have basic implementation example.
@@ -86,32 +88,15 @@ Check the example, Now you have a basic monorepo project!
 
 ## Examples
 
-### Demo
-
-check `demo` under this directory
-
-### Boilerplate
-
 check `boilerplate` under this directory. Including:
 
 - husky (pre-commit, commitlint)
 - lintstage (eslint, stylelint)
 - code style (prettier, commitlint)
 
-#### step-by-step starting a team-first monorepo project
+### step-by-step starting a team-first monorepo project Boilerplate
 
-```sh
-# initializing pnpm
-pnpm init
-# naming project, description, etc.
-# ...
-
-# installing husky & hooks-related dependencies
-pnpm add husky @commitlint/config-conventional -w -D
-
-# exec hook: `pnpm exec` is same as `npx`
-pnpm exec husky add .husky/pre-commit "TODO:"
-```
+- IDE Setting
 
 with `vscode`, here's the recommoned plugins and setting for teamwork. They are listed in `.vscode`.
 
@@ -152,5 +137,35 @@ in `settings.json`:
     "editor.defaultFormatter": "esbenp.prettier-vscode"
   }
 }
+```
 
+- Git hooks & npm dependencies
+
+```sh
+# initializing pnpm
+pnpm init
+# naming project, description, etc.
+# ...
+
+# installing husky & hooks-related dependencies
+pnpm add husky @commitlint/config-conventional @commitlint/cli -w -D
+
+## preparing husky (git init needed)
+pnpm pkg set scripts.prepare="husky install"
+pnpm prepare
+
+# add commit-msg hook: `pnpm exec` is same as `npx`
+pnpm exec husky add .husky/commit-msg  'pnpm exec --no -- commitlint --edit ${1}'
+
+# add pre-commit hook (for lint-stage)
+# check eslint config for ts in "https://typescript-eslint.io/getting-started"
+pnpm exec husky add .husky/pre-commit "pnpm exec lint-staged"
+```
+
+in `lint-stage`, you should add something like behind in package.json
+
+```json
+  "lint-staged": {
+    "*.{js,ts}": "pnpm exec eslint --cache --fix"
+  },
 ```
