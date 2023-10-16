@@ -88,6 +88,8 @@ CMD ["npm", "run", "serve"]
 
 ```sh
 docker build -t michael/nodejs_demo .
+# if you have dockerfile named like 'dockerfile.test'
+docker build -t michael/nodejs_demo -f dockerfile.test .
 
 docker run -it -p 3001:3000 michael/nodejs_demo
 
