@@ -84,9 +84,11 @@ EXPOSE 3000
 CMD ["npm", "run", "serve"]
 ```
 
-- check below, sample shell
+to build a docker image:
 
 ```sh
+# docker build -t {name} -f {docker_file_path} {working_directory}
+
 docker build -t michael/nodejs_demo .
 # if you have dockerfile named like 'dockerfile.test'
 docker build -t michael/nodejs_demo -f dockerfile.test .
@@ -146,8 +148,8 @@ services:
 ```
 
 - `volumes` directive in docker-compose, `{xx}:{xx}`, the colon `(:)` is to separate two paths.
-the first path is the path on the host machine
-the second path is the path inside the container.
+  the first path is the path on the host machine
+  the second path is the path inside the container.
 
 In this way, when the container starts, the specified path on the host will be mounted to the specified path in the container, so that the container can access files or directories on the host.
 
