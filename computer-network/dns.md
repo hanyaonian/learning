@@ -1,4 +1,4 @@
-### DNS 工作
+# DNS 工作
 
 DNS 具体的查找过程，包括：浏览器缓存->系统缓存->路由器缓存...
 
@@ -8,6 +8,6 @@ DNS 具体的查找过程，包括：浏览器缓存->系统缓存->路由器缓
 - 操作系统将域名发送至 LDNS（本地区域名服务器），LDNS 查询 自己的 DNS 缓存，查找成功则返回结果，失败则发起一个迭代 DNS 解析请求（DNS 有多层，顶级 root 是万维网那个还是啥）：
   - LDNS 向 Root Name Server （根域名服务器，如 com、net、org 等的解析的顶级域名服务器的地址）发起请求，此处，Root Name Server 返回 com 域的顶级域名服务器的地址；
   - LDNS 向 com 域的顶级域名服务器发起请求，返回 baidu.com 域名服务器地址（IP）；
-  - LDNS 向 baidu.com 域名服务器发起请求，得到 www.baidu.com 的 IP 地址；
+  - LDNS 向 baidu.com 域名服务器发起请求，得到 <www.baidu.com> 的 IP 地址；
 - LDNS 将得到的 IP 地址返回给操作系统，同时自己也将 IP 地址缓存起来（操作系统缓存）；
 - 操作系统将 IP 地址返回给浏览器（浏览器缓存）；
