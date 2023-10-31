@@ -58,12 +58,17 @@ Like built-in elements, custom elements can use HTML attributes to configure the
 
 A static property named `observedAttributes`. This must be an array containing the names of all attributes for which the element needs change notifications.
 An implementation of the `attributeChangedCallback()` lifecycle callback.
+
 The `attributeChangedCallback()` callback is then called whenever an attribute whose name is listed in the element's `observedAttributes` property is added, modified, removed, or replaced.
 
 ```js
 // Create a class for the element
 class MyCustomElement extends HTMLElement {
-  static observedAttributes = ["color", "size"];
+  static get observedAttributes () {
+    return ["color", "size"];
+  }
+  // or 
+  // static observedAttributes = ["color", "size"];
   constructor() {
     // Always call super first in constructor
     super();
@@ -75,3 +80,19 @@ class MyCustomElement extends HTMLElement {
 
 customElements.define("my-custom-element", MyCustomElement);
 ```
+
+## type definition
+
+```ts
+export abstract class WebComponent extends HTMLElement {
+  static readonly observedAttributes?: Array<string>;
+  abstract adoptedCallback?(): void;
+  abstract connectedCallback?(): void;
+  abstract disconnectedCallback?(): void;
+  abstract attributeChangedCallback?(name: string, oldValue: null | string, newValue: null | string): void;
+}
+```
+
+## Custom web-component example & excercise
+
+TODO:
