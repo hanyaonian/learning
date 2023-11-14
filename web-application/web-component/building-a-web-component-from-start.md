@@ -1,5 +1,11 @@
 # Building a web component from start
 
+- 3 core:
+
+1. custom elements
+2. shadow dom
+3. html template
+
 reference:
 
 - [MDN](https://developer.mozilla.org/en-US/docs/Web/API/Web_components)
@@ -81,7 +87,9 @@ class MyCustomElement extends HTMLElement {
 customElements.define("my-custom-element", MyCustomElement);
 ```
 
-## type definition
+## With typescript
+
+- Webcomponent basic type definition.
 
 ```ts
 export abstract class WebComponent extends HTMLElement {
@@ -93,6 +101,54 @@ export abstract class WebComponent extends HTMLElement {
 }
 ```
 
+- creating custom events with type hints:
+
+```ts
+/**
+ * In webcomponent, override
+ * addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
+ */
+override addEventListener<K extends keyof CustomEventsHandler>(
+  type: K,
+  listener: K extends CustomEventNames ? CustomEventsHandler[K] : EventListenerOrEventListenerObject,
+  options?: boolean | AddEventListenerOptions,
+): void {
+  super.addEventListener(type, listener, options);
+}
+```
+
+example with custom `Event`, which including data in specific data:
+
+```ts
+export interface CustomEventsHandler extends HTMLElementEventMap, CustomEvents {}
+
+interface CustomEvents {
+  "some-event": (this: HTMLElement, event: CustomEvent<string>) => any;
+}
+
+export type CustomEventNames = keyof CustomEvents;
+
+export class CustomEvent<T> extends Event {
+  constructor(
+    name: CustomEventNames,
+    readonly data?: T,
+  ) {
+    super(name, {
+      bubbles: true,
+      cancelable: true,
+    });
+  }
+}
+```
+
+with these event's declartion:
+
+```ts
+// in your custom element, you can get type hints with correct data
+// evt.data will show as string type
+customEl.addEventListener('some-event', (evt) => {  })
+```
+
 ## Custom web-component example & excercise
 
-TODO:
+[check this](https://github.com/hanyaonian/terminal-effect-web.git)
