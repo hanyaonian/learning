@@ -1,4 +1,5 @@
-import emit from './emitter1';
+// @ts-ignore
+import emit from "emitter";
 
 interface task {
   /** 指代一个资源 */
@@ -10,16 +11,16 @@ interface task {
 }
 
 enum LINE_EVENT {
-  RECEIVE_TASK = 'RECEIVE_TASK',
-  LINE_FREE = 'LINE_FREE',
-  TASK_OUT = 'TASK_OUT'
+  RECEIVE_TASK = "RECEIVE_TASK",
+  LINE_FREE = "LINE_FREE",
+  TASK_OUT = "TASK_OUT",
 }
 
 /** 队列状态 */
 enum LINE_STATUS {
   BUSY,
   IDLE,
-  EMPTY
+  EMPTY,
 }
 
 /** 任务队列 */
