@@ -1,9 +1,33 @@
 {
-    "explorer.openEditors.visible": 2,
-    "editor.formatOnSave": true,
-    "eslint.run": "onType",
-    "eslint.enable": true,
     "[javascript]": {
-        "editor.defaultFormatter": "esbenp.prettier-vscode"
+      "editor.defaultFormatter": "esbenp.prettier-vscode"
     },
-}
+    "[typescript]": {
+      "editor.defaultFormatter": "esbenp.prettier-vscode"
+    },
+    "[json]": {
+      "editor.defaultFormatter": "vscode.json-language-features"
+    },
+    "[html]": {
+      "editor.defaultFormatter": "vscode.html-language-features"
+    },
+    "[markdown]": {
+      "editor.defaultFormatter": "esbenp.prettier-vscode"
+    },
+    "files.eol": "\n",
+    "editor.rulers": [120],
+    "editor.formatOnSave": true,
+    "eslint.format.enable": true,
+    "eslint.options": {
+      "configFile": "./eslintrc.js"
+    },
+    "editor.defaultFormatter": "esbenp.prettier-vscode",
+    "editor.codeActionsOnSave": {
+      "source.fixAll.eslint": "explicit"
+    },
+    "editor.guides.bracketPairs": true,
+    "editor.bracketPairColorization.enabled": true,
+    "eslint.validate": ["javascript", "javascriptreact", "typescript", "vue"],
+    "javascript.validate.enable": false
+  }
+  
