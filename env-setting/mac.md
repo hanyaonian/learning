@@ -1,4 +1,13 @@
-# cmd config
+## Husky not working
+
+```sh
+# disk access problem
+
+chmod ug+x .husky/*
+chmod ug+x .git/hooks/*
+```
+
+## cmd config
 
 - `~/.zshrc` => `zsh`
 - `~/.bash_profile` => `bash`
