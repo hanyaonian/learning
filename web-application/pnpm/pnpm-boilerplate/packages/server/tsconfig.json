@@ -3,11 +3,11 @@
     "baseUrl": ".",
     "declaration": true,
     "declarationDir": "./dist",
-    "module": "ESNext",
+    "module": "ES6",
     "outDir": "./dist",
     "strict": true,
     "esModuleInterop": true,
-    "moduleResolution": "NodeNext",
+    "moduleResolution": "Bundler",
     "allowSyntheticDefaultImports": true
   },
   "include": ["./*.ts"],
