@@ -1,6 +1,6 @@
 # Common-Used pnpm command
 
-## Replacement for npm
+## Excuting command
 
 ```sh
 npx jest
