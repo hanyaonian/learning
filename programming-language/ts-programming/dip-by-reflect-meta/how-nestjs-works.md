@@ -161,15 +161,9 @@ TS 中的 常规 装饰器（Decorators）简单说明:
 - Injectable: `类装饰器`
 - Get/Post: `方法装饰器`
 
-看起来不足以完成这个功能啊！！这个时候就要说另一个东西.
+看起来不足以完成这个功能啊！！这个时候就要说另一个东西, metadata 元数据。
 
-### 元数据装饰器
-
-可以使用装饰器将元数据附加到类、方法或属性上, 然后在运行时使用反射 API 获取这些元数据。
-
-这个需要打开 ts 配置中的 `emitDecoratorMetadata`, 除此之外, 再介绍一下几个概念：[反射机制, 注解, 元数据]。
-
-#### 注解与装饰器介绍(AI)
+#### 介绍：反射机制、注解、元数据
 
 - 反射机制（Reflection）
 
@@ -185,9 +179,9 @@ TS 中的 常规 装饰器（Decorators）简单说明:
 
 #### Typescript 中如何做到反射机制与获取元数据？
 
-TypeScript 支持使用 [reflect-metadata](https://www.npmjs.com/package/reflect-metadata) 库来添加和读取元数据。
+TypeScript 支持使用 [reflect-metadata](https://www.npmjs.com/package/reflect-metadata) 库来添加和读取元数据。可以使用装饰器将元数据附加到类、方法或属性上, 然后在运行时使用反射 API 获取这些元数据。
 
-这个 `reflect-metadata` 的作用是啥, 看他 Goals 介绍很清楚, 就不多说了; 打开 ts 的`emitDecoratorMetadata`, 我们用最小实例来看看开启前后的作用:
+这个需要打开 ts 配置中的 `emitDecoratorMetadata`, 在这里可以看到具体的说明: https://www.typescriptlang.org/tsconfig/#Language_and_Environment_6254。我们用最小实例来看看开启前后的作用:
 
 ```ts
 import "reflect-metadata";
