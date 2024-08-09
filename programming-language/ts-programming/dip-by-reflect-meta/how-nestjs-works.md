@@ -322,4 +322,6 @@ const createServer = (instance) => {
 - To enable experimental support for auto-generated type metadata in your TypeScript project, you must add "emitDecoratorMetadata": true to your tsconfig.json file.
   - Please note that auto-generated type metadata may have issues with circular or forward references for types.
 
-2. 基于 esbuild 的 ts 编译器不支持这个特效, 例如 `tsx` 这种工具
+2. 基于 esbuild 的 ts 编译器不支持这个特性, 例如 `tsx` 这种工具; 个人认为使用 `swc` 或者基于 `swc` 的工具会更好用
+
+- https://github.com/evanw/esbuild/issues/257, The `emitDecoratorMetadata` flag is intentionally not supported.
