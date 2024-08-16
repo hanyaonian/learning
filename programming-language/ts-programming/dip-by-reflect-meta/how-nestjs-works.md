@@ -26,11 +26,7 @@ export class CatsController {
 }
 ```
 
-With the above controller fully defined, Nest still doesn't know that CatsController exists and as a result won't create an instance of this class.
-
 控制器已经准备就绪, 可以使用, 但是 Nest 依然不知道 CatsController 是否存在, 所以它不会创建这个类的一个实例。
-
-we include the controllers array within the @Module() decorator. We attached the metadata to the module class using the @Module() decorator, and Nest can now easily reflect which controllers have to be mounted.
 
 使用 `@Module()` 装饰器将元数据附加到模块类中, 现在, Nest 可以轻松反射（reflect）出哪些控制器（controller）必须被安装。
 
@@ -46,8 +42,6 @@ export class AppModule {}
 ```
 
 Provider 提供器是 Nest 中的一个基本概念。许多基本的 Nest 类可以被视为提供器 - 服务、存储库、工厂、助手等等。提供器的主要思想是它可以作为依赖注入；这意味着对象之间可以创建各种关系, 并且 "接线" 这些对象的功能很大程度上可以委托给 Nest 运行时系统。
-
-Providers are a fundamental concept in Nest. Many of the basic Nest classes may be treated as a provider – services, repositories, factories, helpers, and so on. The main idea of a provider is that it can be injected as a dependency; this means objects can create various relationships with each other, and the function of "wiring up" these objects can largely be delegated to the Nest runtime system.
 
 ![Provider](/assets/programming-language/nestjs-design/provider.png)
 
@@ -70,8 +64,6 @@ export class CatsService {
 ```
 
 现在我们有了一个检索猫的服务类, 让我们在 `CatsController` 中使用它, `CatsService` 通过类构造函数注入。请注意 private 语法的使用。这种简写允许我们立即在同一位置声明和初始化 catsService 成员。
-
-Now that we have a service class to retrieve cats, let's use it inside the `CatsController`. The `CatsService` is injected through the class constructor. Notice the use of the private syntax. This shorthand allows us to both declare and initialize the catsService member immediately in the same location
 
 ```ts
 import { Controller, Get, Post, Body } from "@nestjs/common";
@@ -97,8 +89,6 @@ export class CatsController {
 
 现在我们已经定义了一个提供器 (CatsService), 并且我们有了该服务的一个消费者 (CatsController), 我们需要向 Nest 注册该服务以便注入。
 
-Now that we have defined a provider (CatsService), and we have a consumer of that service (CatsController), we need to register the service with Nest so that it can perform the injection.
-
 ```ts
 import { Module } from "@nestjs/common";
 import { CatsController } from "./cats/cats.controller";
@@ -112,8 +102,6 @@ export class AppModule {}
 ```
 
 完成了 controller 和 provider 后, 启动应用, http://localhost:3000/cats 可以正确识别请求并且给出对应的回应.
-
-Once the application is running, use post or get request at http://localhost:3000/cats, gets the result.
 
 ```ts
 import { NestFactory } from "@nestjs/core";
@@ -130,8 +118,6 @@ import { AppModule } from "./app.module";
 ## DI 是怎么做到的？如何通过 反射（reflect）得知都有什么控制器/服务？
 
 在 Nest 中, 由于 TypeScript 的功能, 管理依赖非常容易, 因为它们只是按类型解析。
-
-In Nest, thanks to TypeScript capabilities, it's extremely easy to manage dependencies because they are resolved just by type.
 
 ```ts
 constructor(private catsService: CatsService) {}
@@ -161,7 +147,7 @@ TS 中的 常规 装饰器（Decorators）简单说明:
 - Injectable: `类装饰器`
 - Get/Post: `方法装饰器`
 
-看起来不足以完成这个功能啊！！这个时候就要说另一个东西, metadata 元数据。
+看起来不足以完成这个功能啊。这个时候就要说另一个东西, metadata 元数据。
 
 #### 介绍：反射机制、注解、元数据
 
@@ -177,9 +163,9 @@ TS 中的 常规 装饰器（Decorators）简单说明:
 
   元数据是与程序元素（如类、方法、属性等）相关联的数据, 它提供了关于这些元素的额外信息。在 TypeScript 中, 元数据通常以键值对的形式存在, 可以通过反射机制在运行时访问和操作。
 
-#### Typescript 中如何做到反射机制与获取元数据？
+#### Typescript语言特性: 元数据
 
-TypeScript 支持使用 [reflect-metadata](https://www.npmjs.com/package/reflect-metadata) 库来添加和读取元数据。可以使用装饰器将元数据附加到类、方法或属性上, 然后在运行时使用反射 API 获取这些元数据。
+TypeScript 支持使用 [reflect-metadata](https://www.npmjs.com/package/reflect-metadata) 库来添加和读取元数据。可以使用装饰器将元数据附加到类、方法或属性上, 然后在运行时使用反射 API 获取这些元数据。通过元数据反射, 可以获取到方法的参数类型、返回类型等(包含构造函数)
 
 这个需要打开 ts 配置中的 `emitDecoratorMetadata`, 在这里可以看到具体的说明: https://www.typescriptlang.org/tsconfig/#Language_and_Environment_6254。我们用最小实例来看看开启前后的作用:
 
@@ -214,7 +200,11 @@ var HelloService = /** @class */ (function () {
 })();
 ```
 
-可以看到, 用到了装饰器 + `emitDecoratorMetadata`, 会多出一个 `design:paramtypes` 用来记录构造函数的参数类型! 这就是为啥 nestjs 可以做到依赖注入并准确的将需要的类型插入到控制器构造函数中！
+可以看到, 用到了装饰器 + `emitDecoratorMetadata`, 会多出一个 `design:paramtypes` 用来记录构造函数的参数类型。这就是为啥 nestjs 可以做到依赖注入并准确的将需要的类型插入到控制器构造函数中。emitDecoratorMetadata支持的几种特定的 key 如下:
+
+- design:paramtypes 获取函数参数类型
+- design:type 获取类型
+- design:returntype 获取返回值类型
 
 ## 动手复刻一个相似的 DI: 加深理解
 
@@ -322,6 +312,8 @@ const createServer = (instance) => {
 - To enable experimental support for auto-generated type metadata in your TypeScript project, you must add "emitDecoratorMetadata": true to your tsconfig.json file.
   - Please note that auto-generated type metadata may have issues with circular or forward references for types.
 
-2. 基于 esbuild 的 ts 编译器不支持这个特性, 例如 `tsx` 这种工具; 个人认为使用 `swc` 或者基于 `swc` 的工具会更好用
+2. 基于 esbuild 的 ts 编译器对实验性的语言特性都不怎么支持, 例如 `tsx` 这种工具是基于esbuild的，就不太好使; 个人认为使用 `swc` 或者基于 `swc` 的工具(tsup)会更好用。
 
 - https://github.com/evanw/esbuild/issues/257, The `emitDecoratorMetadata` flag is intentionally not supported.
+
+归根结底, 对实验性的程序语言特性应该还是谨慎使用, 因为现在ts5.0正式支持的装饰器又是风格大变, 和实验性的特性相去甚远了。。
