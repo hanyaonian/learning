@@ -24,103 +24,81 @@ interface EventMap {
 
 export interface TypedEventEmitter<Events extends EventMap>
   extends EventEmitter {
-  addListener<K extends keyof Event>(
+  addListener<K extends keyof Events>(
     eventName: K,
     listener: (arg: Events[K]) => void
   ): this;
-  on<K extends keyof Event>(
+  on<K extends keyof Events>(
     eventName: K,
     listener: (arg: Events[K]) => void
   ): this;
-  once<K extends keyof Event>(
+  once<K extends keyof Events>(
     eventName: K,
     listener: (arg: Events[K]) => void
   ): this;
-  removeListener<K extends keyof Event>(
+  removeListener<K extends keyof Events>(
     eventName: K,
     listener: (arg: Events[K]) => void
   ): this;
-  off<K extends keyof Event>(
+  off<K extends keyof Events>(
     eventName: K,
     listener: (arg: Events[K]) => void
   ): this;
-  emit<K extends keyof Event>(
+  emit<K extends keyof Events>(
     eventName: K,
     data: Parameters<Events[K]>
   ): boolean;
 
   // not common-used types
-  //   prependListener<E extends keyof Events>(event: E, listener: Events[E]): this;
-  //   prependOnceListener<E extends keyof Events>(event: E, listener: Events[E]): this;
-
-  //   removeAllListeners<E extends keyof Events>(event?: E): this;
-  //   removeListener<E extends keyof Events>(event: E, listener: Events[E]): this;
-
-  //   // The sloppy `eventNames()` return type is to mitigate type incompatibilities - see #5
-  //   eventNames(): (keyof Events | string | symbol)[];
-  //   rawListeners<E extends keyof Events>(event: E): Events[E][];
-  //   listeners<E extends keyof Events>(event: E): Events[E][];
-  //   listenerCount<E extends keyof Events>(event: E): number;
-
-  //   getMaxListeners(): number;
-  //   setMaxListeners(maxListeners: number): this;
+  // ...more,  prependListener ... etc.
 }
 
 // for class usages
 
-export class TypedEventEmitterClass<
-  Events extends EventMap
-> extends EventEmitter {
-  override addListener<K extends keyof Event>(
+type EventType = string | symbol;
+
+// NOTE: potential bug of typescript:
+// without as EventType,
+// Argument of type 'string | number | symbol' is not assignable to parameter of type 'string | symbol'.
+// eventName: string | number | symbol
+
+export class TypedEventEmitter<Events extends EventMap> extends EventEmitter {
+  override addListener<K extends keyof Events>(
     eventName: K,
     listener: (arg: Events[K]) => void
   ) {
-    return super.addListener(eventName, listener);
+    return super.addListener(eventName as EventType, listener);
   }
-  override on<K extends keyof Event>(
+  override on<K extends keyof Events>(
     eventName: K,
     listener: (arg: Events[K]) => void
   ): this {
-    return super.on(eventName, listener);
+    return super.on(eventName as EventType, listener);
   }
-  override once<K extends keyof Event>(
+  override once<K extends keyof Events>(
     eventName: K,
     listener: (arg: Events[K]) => void
   ): this {
-    return super.once(eventName, listener);
+    return super.once(eventName as EventType, listener);
   }
-  override removeListener<K extends keyof Event>(
+  override removeListener<K extends keyof Events>(
     eventName: K,
     listener: (arg: Events[K]) => void
   ): this {
-    return super.removeListener(eventName, listener);
+    return super.removeListener(eventName as EventType, listener);
   }
-  override off<K extends keyof Event>(
+  override off<K extends keyof Events>(
     eventName: K,
     listener: (arg: Events[K]) => void
   ): this {
-    return super.off(eventName, listener);
+    return super.off(eventName as EventType, listener);
   }
-  override emit<K extends keyof Event>(
+  override emit<K extends keyof Events>(
     eventName: K,
-    data: Parameters<Events[K]>
+    data: Parameters<Events[K]>[0]
   ): boolean {
-    return super.emit(eventName, data);
+    return super.emit(eventName as EventType, data);
   }
 
-  // not common-used types
-  //   prependListener<E extends keyof Events>(event: E, listener: Events[E]): this;
-  //   prependOnceListener<E extends keyof Events>(event: E, listener: Events[E]): this;
-
-  //   removeAllListeners<E extends keyof Events>(event?: E): this;
-  //   removeListener<E extends keyof Events>(event: E, listener: Events[E]): this;
-
-  //   // The sloppy `eventNames()` return type is to mitigate type incompatibilities - see #5
-  //   eventNames(): (keyof Events | string | symbol)[];
-  //   rawListeners<E extends keyof Events>(event: E): Events[E][];
-  //   listeners<E extends keyof Events>(event: E): Events[E][];
-  //   listenerCount<E extends keyof Events>(event: E): number;
-
-  //   getMaxListeners(): number;
-  //   setMaxListeners(maxListeners: number): this;
+  // ... more
 }
