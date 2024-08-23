@@ -24,26 +24,14 @@ interface EventMap {
 
 export interface TypedEventEmitter<Events extends EventMap>
   extends EventEmitter {
-  addListener<K extends keyof Events>(
-    eventName: K,
-    listener: (arg: Events[K]) => void
-  ): this;
-  on<K extends keyof Events>(
-    eventName: K,
-    listener: (arg: Events[K]) => void
-  ): this;
-  once<K extends keyof Events>(
-    eventName: K,
-    listener: (arg: Events[K]) => void
-  ): this;
+  addListener<K extends keyof Events>(eventName: K, listener: Events[K]): this;
+  on<K extends keyof Events>(eventName: K, listener: Events[K]): this;
+  once<K extends keyof Events>(eventName: K, listener: Events[K]): this;
   removeListener<K extends keyof Events>(
     eventName: K,
-    listener: (arg: Events[K]) => void
+    listener: Events[K]
   ): this;
-  off<K extends keyof Events>(
-    eventName: K,
-    listener: (arg: Events[K]) => void
-  ): this;
+  off<K extends keyof Events>(eventName: K, listener: Events[K]): this;
   emit<K extends keyof Events>(
     eventName: K,
     data: Parameters<Events[K]>
@@ -65,31 +53,28 @@ type EventType = string | symbol;
 export class TypedEventEmitter<Events extends EventMap> extends EventEmitter {
   override addListener<K extends keyof Events>(
     eventName: K,
-    listener: (arg: Events[K]) => void
+    listener: Events[K]
   ) {
     return super.addListener(eventName as EventType, listener);
   }
-  override on<K extends keyof Events>(
-    eventName: K,
-    listener: (arg: Events[K]) => void
-  ): this {
+  override on<K extends keyof Events>(eventName: K, listener: Events[K]): this {
     return super.on(eventName as EventType, listener);
   }
   override once<K extends keyof Events>(
     eventName: K,
-    listener: (arg: Events[K]) => void
+    listener: Events[K]
   ): this {
     return super.once(eventName as EventType, listener);
   }
   override removeListener<K extends keyof Events>(
     eventName: K,
-    listener: (arg: Events[K]) => void
+    listener: Events[K]
   ): this {
     return super.removeListener(eventName as EventType, listener);
   }
   override off<K extends keyof Events>(
     eventName: K,
-    listener: (arg: Events[K]) => void
+    listener: Events[K]
   ): this {
     return super.off(eventName as EventType, listener);
   }
