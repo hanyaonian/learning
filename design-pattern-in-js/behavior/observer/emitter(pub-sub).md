@@ -1,11 +1,19 @@
 # Emitter
 
+![pub-sub](/assets/design-pattern/publish-subscribe.png)
+
+The observer pattern is scheduled by a specific target. For example, when an event is triggered, the subject will call the observer's method, so there is a dependency between the subscriber and publisher of the observer pattern.
+
+The publish-subscribe pattern is called by a unified scheduling center, so the publisher and subscriber do not need to know the existence of each other.
+
 ## Emitter types in TS
+
+**_NOTE_** this is `outdated` and will encounter several issues (but still usable for simple cases), please refer to `programming-language/ts-programming/typed-emitter`
 
 Custom events in typescript
 
 ```ts
-import { EventEmitter } from 'events';
+import { EventEmitter } from "events";
 
 interface CustomEvents {
   event1: () => void;
@@ -22,8 +30,8 @@ class CustomClass extends EventEmitter {
 const a = new CustomClass();
 
 // typescript hint works
-a.on('event1', () => {});
-a.on('event2', (text) => {});
+a.on("event1", () => {});
+a.on("event2", (text) => {});
 ```
 
 in popular npm package `eventemitter3`, this won't work:
