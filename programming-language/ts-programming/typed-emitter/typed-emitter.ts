@@ -34,7 +34,7 @@ export interface TypedEventEmitter<Events extends EventMap>
   off<K extends keyof Events>(eventName: K, listener: Events[K]): this;
   emit<K extends keyof Events>(
     eventName: K,
-    data: Parameters<Events[K]>
+    data?: Parameters<Events[K]>
   ): boolean;
 
   // not common-used types
@@ -80,7 +80,7 @@ export class TypedEventEmitter<Events extends EventMap> extends EventEmitter {
   }
   override emit<K extends keyof Events>(
     eventName: K,
-    data: Parameters<Events[K]>[0]
+    data?: Parameters<Events[K]>[0]
   ): boolean {
     return super.emit(eventName as EventType, data);
   }
