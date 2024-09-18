@@ -1,5 +1,11 @@
 # common use of shell
 
+## Before writting shell script, take a look...
+
+You are a good js/ts programmer, why not use JS/TS to do what shell can do?
+
+[zx](https://github.com/google/zx), useful wrappers around `child_process`
+
 ## use variable
 
 ```sh
