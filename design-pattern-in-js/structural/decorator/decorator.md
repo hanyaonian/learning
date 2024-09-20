@@ -50,7 +50,7 @@ class Logic {
 }
 ```
 
-这里的counttime就是一些编程语言中的修饰器语法。
+这里的 counttime 就是一些编程语言中的修饰器语法。
 
 ## TypeScript 中的应用
 
@@ -62,3 +62,6 @@ class Logic {
 
 实操:
 [logger](https://github.com/hanyaonian/m-logger)
+
+实践理解:
+[how-nestjs-works](/programming-language/ts-programming/dip-by-reflect-meta/how-nestjs-works.md)
