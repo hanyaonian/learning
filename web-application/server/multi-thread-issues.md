@@ -43,3 +43,28 @@ async function fetchData(x) {
 
 const data = await Promise.all(array.map(fetchData));
 ```
+
+典型场景 2:
+
+```ts
+// 假设有一堆 async 操作
+
+// normal case 1 - 排队一个个整, n * single time
+for (const task of tasks) {
+  await task;
+}
+// normal case 2 - 全部一起跑, 有可能并发太高了, 导致影响业务逻辑, exceed max capacity
+await Promise.all(tasks);
+
+// async sema case:
+const s = new Sema(max_capacity_num);
+const sema_tasks = tasks.map(async (task) => {
+  await s.acquire();
+  try {
+    await task();
+  } finally {
+    s.release();
+  }
+});
+await Promise.all(sema_tasks);
+```
