@@ -48,10 +48,11 @@ const data = await Promise.all(array.map(fetchData));
 
 ```ts
 // 假设有一堆 async 操作
+var tasks: Promise<void>[];
 
 // normal case 1 - 排队一个个整, n * single time
 for (const task of tasks) {
-  await task;
+  await task();
 }
 // normal case 2 - 全部一起跑, 有可能并发太高了, 导致影响业务逻辑, exceed max capacity
 await Promise.all(tasks);
