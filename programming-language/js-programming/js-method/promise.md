@@ -1,6 +1,6 @@
 # Build a promise yourself
 
-[源码地址](https://github.com/hanyaonian/web-dev-learning/tree/main/js-method/myPromise)
+[源码地址](./promise/index.ts)
 
 要实现 Promise，首先要对 Promise 有所了解，并知其标准。
 
@@ -81,9 +81,9 @@
 
 ```typescript
 export enum promiseStatus {
-  PENDING = 'pending',
-  REJECTED = 'rejected',
-  FULFILLED = 'fulfilled'
+  PENDING = "pending",
+  REJECTED = "rejected",
+  FULFILLED = "fulfilled",
 }
 
 export type promiseExecutor = (resolve: Function, reject: Function) => void;
@@ -97,7 +97,7 @@ function promiseResolutionProcedure(
   reject
 ) {
   if (promise2 === x) {
-    reject(new TypeError('same promise here'));
+    reject(new TypeError("same promise here"));
   }
   // 2.3.2 返回promise
   if (x instanceof myPromise) {
@@ -122,12 +122,12 @@ function promiseResolutionProcedure(
   // 2.3.3.3.4.1 If resolvePromise or rejectPromise have been called, ignore it.
   let isCalled = false;
   // typeof null 是object
-  if ((typeof x === 'object' && x !== null) || typeof x === 'function') {
+  if ((typeof x === "object" && x !== null) || typeof x === "function") {
     try {
       // 2.3.3.1 Let then be x.then.
       let then = x.then as Function;
       // 2.3.3.3
-      if (typeof then === 'function') {
+      if (typeof then === "function") {
         then.call(
           x,
           (y) => {
@@ -223,12 +223,12 @@ export default class myPromise {
     // 2.7.2.3 If onFulfilled is not a function and promise1 is fulfilled,
     // promise2 must be fulfilled with the same value as promise1.
     onFulfilled =
-      typeof onFulfilled === 'function' ? onFulfilled : (val) => val;
+      typeof onFulfilled === "function" ? onFulfilled : (val) => val;
     onRejected =
       // 2.7.2.4 If onRejected is not a function and promise1 is rejected,
       // promise2 must be rejected with the same reason as promise1.
       // 这里的err是promise1 的reject原因，throw 出去promise2 就可以catch到
-      typeof onRejected === 'function'
+      typeof onRejected === "function"
         ? onRejected
         : (err) => {
             throw err;
@@ -371,8 +371,8 @@ Promise.all() 方法接收一个 promise 的 iterable 类型（注：Array，Map
   需要先安装 promises-aplus-tests 依赖, tsc 编译后运行或者 ts-node 运行，可以完美通过所有 test cases
 
 ```typescript
-import myPromise from './index';
-import * as promiseTest from 'promises-aplus-tests';
+import myPromise from "./index";
+import * as promiseTest from "promises-aplus-tests";
 
 const adapter = {
   deferred: () => {
@@ -385,11 +385,11 @@ const adapter = {
     return {
       promise,
       reject,
-      resolve
+      resolve,
     };
   },
   rejected: (reason) => myPromise.reject(reason),
-  resolved: (value) => myPromise.resolve(value)
+  resolved: (value) => myPromise.resolve(value),
 };
 
 promiseTest(adapter, function (err) {
@@ -402,11 +402,11 @@ promiseTest(adapter, function (err) {
   这里用的是 MDN 的示范例子
 
 ```typescript
-import myPromise from './index';
+import myPromise from "./index";
 
 // mdn cases for Promise.resolve
 // static resolve
-Promise.resolve('Success').then(
+Promise.resolve("Success").then(
   function (value) {
     console.log(value); // "Success"
   },
@@ -418,19 +418,19 @@ Promise.resolve('Success').then(
 // reslove a promise
 let newPromise = new myPromise((resolve, reject) => {
   setTimeout(() => {
-    resolve('resolve async promise');
+    resolve("resolve async promise");
   }, 3000);
 });
 myPromise.resolve(newPromise).then((data) => {
-  console.log(data, 'ok');
+  console.log(data, "ok");
 });
 
 // resolve thenable and throw error
 // Resolve一个thenable对象
 var p1 = myPromise.resolve({
   then: function (onFulfill, onReject) {
-    onFulfill('fulfilled!');
-  }
+    onFulfill("fulfilled!");
+  },
 });
 console.log(p1 instanceof myPromise); // true, 这是一个Promise对象
 
@@ -447,9 +447,9 @@ p1.then(
 // Promise rejects
 var thenable = {
   then: function (resolve) {
-    throw new TypeError('Throwing');
-    resolve('Resolving');
-  }
+    throw new TypeError("Throwing");
+    resolve("Resolving");
+  },
 };
 
 var p2 = myPromise.resolve(thenable);
@@ -466,9 +466,9 @@ p2.then(
 // Promise resolves
 var thenable = {
   then: function (resolve) {
-    resolve('Resolving');
-    throw new TypeError('Throwing');
-  }
+    resolve("Resolving");
+    throw new TypeError("Throwing");
+  },
 };
 
 var p3 = myPromise.resolve(thenable);
@@ -495,7 +495,7 @@ p3.then(
   这里用的也是 MDN 的示范例子
 
 ```typescript
-import myPromise from './index';
+import myPromise from "./index";
 
 // cases for Promise.all
 var resolvedPromisesArray = [myPromise.resolve(33), myPromise.resolve(44)];
@@ -506,7 +506,7 @@ console.log(p);
 
 // using setTimeout we can execute code after the stack is empty
 setTimeout(function () {
-  console.log('the stack is now empty');
+  console.log("the stack is now empty");
   console.log(p);
 });
 
@@ -518,7 +518,7 @@ setTimeout(function () {
 const promise1 = myPromise.resolve(3);
 const promise2 = 42;
 const promise3 = new myPromise((resolve, reject) => {
-  setTimeout(resolve, 100, 'foo');
+  setTimeout(resolve, 100, "foo");
 });
 
 myPromise.all([promise1, promise2, promise3]).then((values) => {
@@ -530,7 +530,7 @@ myPromise.all([promise1, promise2, promise3]).then((values) => {
 var p1 = myPromise.resolve(3);
 var p2 = 1337;
 var p3 = new myPromise((resolve, reject) => {
-  setTimeout(resolve, 100, 'foo');
+  setTimeout(resolve, 100, "foo");
 });
 
 myPromise.all([p1, p2, p3]).then((values) => {

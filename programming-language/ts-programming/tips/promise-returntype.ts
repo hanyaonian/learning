@@ -7,3 +7,9 @@
  */
 export type ResAwaitedType<T extends (...args: any) => any> =
   ReturnType<T> extends Promise<infer U> ? U : never;
+
+// get_rand_num_req: () => Promise<number>
+const get_rand_num_req = async () => Math.random();
+
+// res: number
+let res: ResAwaitedType<typeof get_rand_num_req>;
