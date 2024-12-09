@@ -14,22 +14,21 @@ https://oi-wiki.org/dp/memo/
 
 状态方程: dp[i]=max(dp[i−2]+nums[i],dp[i−1])
 
+dp[i] 记录了此房时最优结果
+
 ```ts
 function rob(nums: number[]): number {
-  let max = 0;
   const result = new Array(nums.length).fill(0);
   result[0] = nums[0];
   if (nums.length === 1) {
-    max = nums[0];
+    return nums[0];
   }
   if (nums.length >= 2) {
     result[1] = Math.max(nums[0], nums[1]);
-    max = Math.max(nums[0], nums[1]);
   }
   for (let i = 2; i < nums.length; i++) {
     result[i] = Math.max(result[i - 2] + nums[i], result[i - 1]);
-    max = Math.max(max, result[i]);
   }
-  return max;
+  return result[nums.length - 1];
 }
 ```
