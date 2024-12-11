@@ -56,7 +56,7 @@
      bar: function () {
        var x = () => this;
        return x;
-     }
+     },
    };
    // 作为对象方法直接调用，此时 bar 方法的环境的 this 是 obj 对象（条目 3）
    var fn = obj.bar();
@@ -76,6 +76,8 @@
  * 可以使用 call 来实现继承：写一个方法，然后让另外一个新的对象来继承此方法。
  * @param {*} context 上下文，当穿null或者undefined时，这个将是全局对象(window)
  * @param  {...any} args 传入方法的参数, 此处是es6写法；es3的话似乎也可以通过eval+字符串拼接的形式去写，见上
+ *
+ * call(thisArg, arg1, arg2, /* …, */, argN)
  */
 Function.prototype.myCall = function (context, ...args) {
   if (this === Function.prototype) {
@@ -101,6 +103,8 @@ Function.prototype.myCall = function (context, ...args) {
  * apply() 方法调用一个具有给定this值的函数，以及以一个数组（或类数组对象）的形式提供的参数。
  * @param {*} context
  * @param {*} args 数组形式的参数列表
+ *
+ * apply(thisArg, argsArray)
  */
 Function.prototype.myApply = function (context, args) {
   if (this === Function.prototype) {
@@ -132,10 +136,12 @@ Function.prototype.myApply = function (context, args) {
  * 而其余参数将作为新函数的参数，供调用时使用。
  * @param {*} context
  * @param {*} args 参数列表
+ *
+ * bind(thisArg, arg1, arg2, /* …, */ argN)
  */
 Function.prototype.myApply = function (context, ...args1) {
   if (this === Function.prototype) {
-    throw new TypeError('Error');
+    throw new TypeError("Error");
   }
   const that = this;
   // 还可以增加其他参数。

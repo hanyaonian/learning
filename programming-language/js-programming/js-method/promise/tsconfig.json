@@ -7,8 +7,7 @@
     "noImplicitAny": false,
     "noImplicitReturns": true,
     "skipLibCheck": true,
-    "moduleResolution": "node",
-    "suppressImplicitAnyIndexErrors": true // 隐藏一些报错
+    "moduleResolution": "node"
   },
   "include": ["./**/*"],
   "exclude": ["./dist/**/*"]
