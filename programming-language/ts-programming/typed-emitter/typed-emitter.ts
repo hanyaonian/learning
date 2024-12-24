@@ -1,5 +1,7 @@
+/// <reference types="node" />
+
 /**
- * @description type-safed eventemitter for nodejs events
+ * @description type-safed eventemitter for nodejs events or `eventemitter3` in web browser
  */
 
 import EventEmitter from "events";
@@ -34,7 +36,7 @@ export interface TypedEventEmitter<Events extends EventMap>
   off<K extends keyof Events>(eventName: K, listener: Events[K]): this;
   emit<K extends keyof Events>(
     eventName: K,
-    data?: Parameters<Events[K]>
+    ...data: Parameters<Events[K]>
   ): boolean;
 
   // not common-used types
@@ -80,10 +82,30 @@ export class TypedEventEmitter<Events extends EventMap> extends EventEmitter {
   }
   override emit<K extends keyof Events>(
     eventName: K,
-    data?: Parameters<Events[K]>[0]
+    ...data: Parameters<Events[K]>
   ): boolean {
-    return super.emit(eventName as EventType, data);
+    return super.emit(eventName as EventType, ...data);
   }
 
   // ... more
 }
+
+/**
+ * Sample
+ */
+
+class A extends TypedEventEmitter<{
+  a: () => void;
+  b: (num: number) => void;
+  c: (num: number, str: string) => void;
+}> {
+  constructor() {
+    super();
+    this.emit("b", 1);
+  }
+}
+
+const a = new A();
+// (parameter) n: number
+// (parameter) s: string
+a.on("c", (n, s) => {});
