@@ -48,7 +48,7 @@ class N2LRUCache<K, V> {
  * findIndex 是 O(n) 的操作
  * 如何优化变为 O1?
  *
- * 首先考虑链表, 因为我们只管顺序其实不用管节点
+ * 首先考虑链表, 因为我们只管首尾顺序
  */
 
 type LNode<K, V> = {
@@ -64,10 +64,6 @@ const debuglog = <K, V>(head: LNode<K, V> | null) => {
   if (!temp) return;
   let txt = `[ ${temp.key}`;
   while (temp.next) {
-    if (temp.next === temp) {
-      console.error("cicular loop: ", temp);
-      break;
-    }
     temp = temp.next;
     txt = `${txt} ${temp.key}`;
   }
@@ -92,7 +88,7 @@ class LRUCache<K, V> {
       }
       return -1;
     })();
-    // console.log(`get ${key} -> ${result} -> ${debuglog(this.head)}`);
+    console.log(`get ${key} -> ${debuglog(this.head)}; result is ${result}`);
     return result;
   }
 
@@ -114,7 +110,7 @@ class LRUCache<K, V> {
       this.remove(node!);
       this.toTail(node!);
     }
-    // console.log(`put ${key} -> ${debuglog(this.head)}`);
+    console.log(`put ${key} -> ${debuglog(this.head)}`);
   }
 
   private createNode(key: K, val: V) {
@@ -148,13 +144,6 @@ class LRUCache<K, V> {
   }
 
   private toTail(node: LNode<K, V>) {
-    if (!this.head && !this.tail) {
-      this.head = node;
-      this.tail = node;
-      this.head.next = null;
-      this.tail.pre = null;
-      return;
-    }
     if (this.tail) {
       node.next = null;
       node.pre = this.tail;
