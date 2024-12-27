@@ -1,7 +1,9 @@
 /**
+ * https://leetcode.cn/problems/lru-cache/
  * @description simple lru cache sample
- */
-class LRUCache<K, V> {
+ * */
+
+class N2LRUCache<K, V> {
   private map: Map<K, V> = new Map();
   private recent_keys: K[] = [];
   constructor(readonly capacity: number) {}
@@ -49,101 +51,131 @@ class LRUCache<K, V> {
  * 首先考虑链表, 因为我们只管顺序其实不用管节点
  */
 
-type ListNode<K, V> = {
-  pre: ListNode<K, V> | null;
-  next: ListNode<K, V> | null;
+type LNode<K, V> = {
+  pre: LNode<K, V> | null;
+  next: LNode<K, V> | null;
   val: V;
   key: K;
 };
 
-function debuglog<K, V>(prefix: string, head: ListNode<K, V> | null) {
+// 用于调试, 可以看lru队列
+const debuglog = <K, V>(head: LNode<K, V> | null) => {
   let temp = head;
-  if (!temp) return console.log("no head");
-  let txt = String(temp.key);
+  if (!temp) return;
+  let txt = `[ ${temp.key}`;
   while (temp.next) {
+    if (temp.next === temp) {
+      console.error("cicular loop: ", temp);
+      break;
+    }
     temp = temp.next;
     txt = `${txt} ${temp.key}`;
   }
-  console.log(`${prefix} list is : ${txt}`);
-}
+  return `${txt} ]`;
+};
 
-class LRUCache2<K, V> {
-  private map: Map<K, ListNode<K, V>> = new Map();
-  private tail: ListNode<K, V> | null = null;
-  private head: ListNode<K, V> | null = null;
+class LRUCache<K, V> {
+  private map: Map<K, LNode<K, V>> = new Map();
+  private tail: LNode<K, V> | null = null;
+  private head: LNode<K, V> | null = null;
   private count = 0;
 
   constructor(readonly capacity: number) {}
 
   get(key: K): V | -1 {
-    if (this.map.has(key)) {
-      const node = this.map.get(key)!;
-      if (node === this.tail) {
-        // no change
+    const result = (() => {
+      if (this.map.has(key)) {
+        const node = this.map.get(key)!;
+        this.remove(node);
+        this.toTail(node);
         return node.val;
-      } else if (node === this.head) {
-        // swap head & tail
-        node.pre = this.tail;
-        node.next!.pre = null;
-        this.tail!.next = node;
-        this.head = node.next;
-        node.next = null;
-        this.tail = node;
-      } else {
-        // swap body
-        this.tail!.next = node;
-        node.pre!.next = node.next;
-        node.pre = this.tail;
-        node.next = null;
       }
-      debuglog(`after get ${key}`, this.head);
-      return node.val;
-    }
-    return -1;
+      return -1;
+    })();
+    // console.log(`get ${key} -> ${result} -> ${debuglog(this.head)}`);
+    return result;
   }
 
   put(key: K, val: V): void {
     if (!this.map.has(key)) {
-      const new_node = {
-        pre: this.tail,
-        next: null,
-        val,
-        key,
-      };
-      // new list
-      if (!this.tail || !this.head) {
-        this.head = new_node;
-        this.tail = new_node;
-        this.count += 1;
-      } else {
-        // remove cache
-        if (this.count >= this.capacity) {
-          this.map.delete(this.head.key);
-          this.head = this.head.next;
-          if (this.head?.pre) {
-            this.head.pre = null;
-          }
-        } else {
-          this.count += 1;
-        }
-        // put tail
-        this.tail.next = new_node;
-        this.tail = new_node;
-      }
+      const new_node = this.createNode(key, val);
+      this.count += 1;
+      this.toTail(new_node);
       this.map.set(key, new_node);
+      if (this.count > this.capacity) {
+        this.map.delete(this.head!.key);
+        this.remove(this.head!);
+        this.count -= 1;
+      }
     } else {
       // update cache
-      this.get(key);
+      const node = this.map.get(key);
+      node!.val = val;
+      this.remove(node!);
+      this.toTail(node!);
     }
-    debuglog(`after put ${key}`, this.head);
+    // console.log(`put ${key} -> ${debuglog(this.head)}`);
+  }
+
+  private createNode(key: K, val: V) {
+    return {
+      pre: null,
+      next: null,
+      val,
+      key,
+    };
+  }
+
+  private remove(node: LNode<K, V>) {
+    if (node.pre) {
+      node.pre.next = node.next;
+      if (!node.next) {
+        this.tail = node.pre;
+      }
+    } else {
+      this.head = node.pre;
+    }
+    if (node.next) {
+      node.next.pre = node.pre;
+      if (!node.pre) {
+        this.head = node.next;
+      }
+    } else {
+      this.tail = node.pre;
+    }
+    node.pre = null;
+    node.next = null;
+  }
+
+  private toTail(node: LNode<K, V>) {
+    if (!this.head && !this.tail) {
+      this.head = node;
+      this.tail = node;
+      this.head.next = null;
+      this.tail.pre = null;
+      return;
+    }
+    if (this.tail) {
+      node.next = null;
+      node.pre = this.tail;
+      this.tail.next = node;
+      this.tail = node;
+    } else {
+      this.head = node;
+      this.tail = node;
+      this.tail.next = null;
+    }
   }
 }
 
-/**
+/*
+ * 样例输入
+ *
  * test: 1, -1, -1, 3, 4
  */
 
-const cache = new LRUCache2(2 /* 缓存容量 */);
+const cache = new LRUCache(2);
+
 cache.put(1, 1);
 cache.put(2, 2);
 cache.get(1); // 返回 1
@@ -153,3 +185,19 @@ cache.put(4, 4); // 该操作会使得关键字 1 作废
 cache.get(1); // 返回 -1 (未找到)
 cache.get(3); // 返回 3
 cache.get(4); // 返回 4
+
+/**
+ * for test case generation in leetcode:
+ */
+
+function generateTestCase(pre, next) {
+  let result = "";
+  pre.forEach((action, index) => {
+    const args = next[index];
+    if (action === "LRUCache")
+      result += `const cache = new LRUCache2(${args.at(0)});`;
+    if (action === "put") result += `cache.put(${args.at(0)}, ${args.at(1)});`;
+    if (action === "get") result += `cache.get(${next[index].at(0)});`;
+  });
+  console.log(result);
+}
