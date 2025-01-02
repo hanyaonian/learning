@@ -1,7 +1,7 @@
 /**
  * https://leetcode.cn/problems/lru-cache/
- * @description simple lru cache sample
- * */
+ * @description simple lru cache sample, O(n)
+ */
 
 class N2LRUCache<K, V> {
   private map: Map<K, V> = new Map();
