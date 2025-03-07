@@ -1,6 +1,6 @@
 # How Nestjs di works
 
-Nestjs 和 Angular 有一些设计比较趣味：通过装饰器（Decorators）做到依赖注入；Nestjs 直说了自己参考的 angular 的, 这部分感兴趣的可以去看看官方文档：
+Nestjs 和 Angular 有一些设计比较有意思：通过装饰器（Decorators）做到依赖注入；Nestjs 直说了自己参考的 angular 的, 这部分感兴趣的可以去看看官方文档：
 
 - Nestjs 官网文档: https://docs.nestjs.com/
 - Angular 文档说明 DI 的逻辑: https://angular.io/guide/dependency-injection
@@ -163,7 +163,7 @@ TS 中的 常规 装饰器（Decorators）简单说明:
 
   元数据是与程序元素（如类、方法、属性等）相关联的数据, 它提供了关于这些元素的额外信息。在 TypeScript 中, 元数据通常以键值对的形式存在, 可以通过反射机制在运行时访问和操作。
 
-#### Typescript语言特性: 元数据
+#### Typescript 语言特性: 元数据
 
 TypeScript 支持使用 [reflect-metadata](https://www.npmjs.com/package/reflect-metadata) 库来添加和读取元数据。可以使用装饰器将元数据附加到类、方法或属性上, 然后在运行时使用反射 API 获取这些元数据。通过元数据反射, 可以获取到方法的参数类型、返回类型等(包含构造函数)
 
@@ -200,7 +200,7 @@ var HelloService = /** @class */ (function () {
 })();
 ```
 
-可以看到, 用到了装饰器 + `emitDecoratorMetadata`, 会多出一个 `design:paramtypes` 用来记录构造函数的参数类型。这就是为啥 nestjs 可以做到依赖注入并准确的将需要的类型插入到控制器构造函数中。emitDecoratorMetadata支持的几种特定的 key 如下:
+可以看到, 用到了装饰器 + `emitDecoratorMetadata`, 会多出一个 `design:paramtypes` 用来记录构造函数的参数类型。这就是为啥 nestjs 可以做到依赖注入并准确的将需要的类型插入到控制器构造函数中。emitDecoratorMetadata 支持的几种特定的 key 如下:
 
 - design:paramtypes 获取函数参数类型
 - design:type 获取类型
@@ -312,8 +312,6 @@ const createServer = (instance) => {
 - To enable experimental support for auto-generated type metadata in your TypeScript project, you must add "emitDecoratorMetadata": true to your tsconfig.json file.
   - Please note that auto-generated type metadata may have issues with circular or forward references for types.
 
-2. 基于 esbuild 的 ts 编译器对实验性的语言特性都不怎么支持, 例如 `tsx` 这种工具是基于esbuild的，就不太好使; 个人认为使用 `swc` 或者基于 `swc` 的工具(tsup)会更好用。
+### 最新更新
 
-- https://github.com/evanw/esbuild/issues/257, The `emitDecoratorMetadata` flag is intentionally not supported.
-
-归根结底, 对实验性的程序语言特性应该还是谨慎使用, 因为现在ts5.0正式支持的装饰器又是风格大变, 和实验性的特性相去甚远了。。
+2024-07 之后, rollup, esbuild 等主流的工具都支持了 5.0 的装饰器，现在可以说非常好使用了 0.0

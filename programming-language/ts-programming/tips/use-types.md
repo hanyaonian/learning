@@ -15,8 +15,24 @@
  * @type {import("eslint").Linter.Config}
  */
 const config = {
-  // got type hint here
+  // got eslint type hint here
 };
+
+/** @type {number | undefined} */
+let a;
+
+/** @type {{a: number}} */
+var obj = { a: 1 };
+
+/**
+ * @param {string} [name] - Somebody's name.
+ */
+const sayHi = (name) => console.log(`hi ${name}`);
+/**
+ * what you got in type hint:
+ * const sayHi: (name: any) => void
+ * @param name — Somebody's name.
+ * /
 ```
 
 ## triple-slash-directives
