@@ -1,6 +1,6 @@
 # Use Types tips
 
-## Use Types in javascript
+## Use Types in javascript code
 
 ```ts
 /**
@@ -54,4 +54,26 @@ similarly
 /// <reference types="vite/client" />
 
 // you got import.meta.MODE ... etc.
+```
+
+## Use Types with javascript files
+
+for example we have a javascript file like `index.js`.
+
+```js
+export function hello(name) {
+  return "hi" + name;
+}
+```
+
+If we want to use typescript hint, creating a `index.d.ts` would help;
+
+```ts
+// index.d.js
+export declare function hello(name: string): string;
+
+// other.js
+// get hint in ide:
+// (alias) function hello(name: string): string
+import { hello } from "index.js";
 ```
