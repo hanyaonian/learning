@@ -1,6 +1,6 @@
 # Web rendering
 
-web 方案越来越多了, 本质上都是在想办法如何更快的把 html,css,js & 用户数据呈现, 全球化的项目更加讲究这个。
+web 渲染 方案越来越多了, 本质上都是在想办法如何更快的把 html,css,js & 数据呈现, 全球化的项目更加讲究这个.
 
 记录一下概念
 
@@ -9,7 +9,7 @@ web 方案越来越多了, 本质上都是在想办法如何更快的把 html,cs
 - CSR + SSR: Hydration
 - Severless SSR: cloud function
 - NSR: Native side rendering - 模板 + 数据, 微信/QQ 游戏中心的方案
-- ESR: Edge rendering (边缘云函数? 腾讯呀 Edgeone 有提供类似能力)
+- ESR: Edge rendering (边缘云函数? 腾讯云 Edgeone 有提供类似能力)
 
 ## Links
 

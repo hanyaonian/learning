@@ -1,5 +1,13 @@
 # Proxy
 
+## Meta programming: method_missing in ruby
+
+see: https://www.cnblogs.com/htoooth/p/11367829.html
+
+##
+
+see: [example](./example.ts)
+
 ## DefineProperty
 
 参考文档： https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/Object/defineProperty
