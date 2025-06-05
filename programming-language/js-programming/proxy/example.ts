@@ -1,6 +1,7 @@
 /**
- * proxy usage example
+ * proxy usage example: request/report method
  */
+
 type RequestConfig = {
   get: {
     get_user_profile: [{}, { user_name: string }];
@@ -10,7 +11,9 @@ type RequestConfig = {
   };
 };
 
-/** infer */
+/**
+ *  get value from tuple with infer
+ */
 type RequestType<T> = T extends [infer Request, any] ? Request : never;
 type ResponseType<T> = T extends [any, infer Response] ? Response : never;
 
@@ -35,7 +38,7 @@ export const request = new Proxy(
                 return;
               // await fetch(sub_action, { data, method: action });
               return await console.log(
-                `using method to ${action} with ${sub_action} and ${JSON.stringify(
+                `using method to ${action} with ${sub_action}, params is: ${JSON.stringify(
                   data
                 )}`
               );
@@ -53,3 +56,7 @@ export const request = new Proxy(
 request.get.get_user_profile({});
 //(property) change_user_name: (ext_content: { new_name: string; }) => Promise<void>
 request.post.change_user_name({ new_name: "hi" });
+
+// result in console:
+// using method to get with get_user_profile and {}
+// using method to post with change_user_name and {"new_name":"hi"}

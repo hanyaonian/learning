@@ -4,7 +4,7 @@
 
 see: https://www.cnblogs.com/htoooth/p/11367829.html
 
-##
+## Usage: Typed-safe abstract object
 
 see: [example](./example.ts)
 
