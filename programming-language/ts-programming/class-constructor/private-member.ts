@@ -12,7 +12,12 @@ class Animal {
 }
 
 class Human extends Animal {
-  private name = "";
+  private name = "initial name";
+
+  constructor() {
+    super();
+    console.log("before Human init");
+  }
 
   init() {
     super.init();
@@ -33,10 +38,11 @@ p1.act();
 /**
  * Result:
  * 
-    Animal init
-    Human init, name:  undefined
-    Human init, given name:  Mike
-    Animal act
-    act
+  Animal init
+  Human init, name:  undefined
+  Human init, given name:  Mike
+  before Human init
+  Animal act
+  act
  * 
  */
