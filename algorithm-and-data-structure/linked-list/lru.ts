@@ -1,9 +1,11 @@
 /**
  * https://leetcode.cn/problems/lru-cache/
  * @description simple lru cache sample, O(n)
+ *
+ * On的LRU实现
  */
 
-class N2LRUCache<K, V> {
+class NLRUCache<K, V> {
   private map: Map<K, V> = new Map();
   private recent_keys: K[] = [];
   constructor(readonly capacity: number) {}
