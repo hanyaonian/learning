@@ -24,37 +24,37 @@ export class DoublyLinkedList<T> {
   }
 
   prepend(value: T): void {
-    const newNode: DoublyLinkedListNode<T> = {
+    const new_node: DoublyLinkedListNode<T> = {
       value,
       prev: null,
       next: this.head,
     };
 
     if (this.head) {
-      this.head.prev = newNode;
+      this.head.prev = new_node;
     } else {
-      this.tail = newNode;
+      this.tail = new_node;
     }
 
-    this.head = newNode;
+    this.head = new_node;
     this.length++;
   }
 
   append(value: T): void {
-    const newNode: DoublyLinkedListNode<T> = {
+    const new_node: DoublyLinkedListNode<T> = {
       value,
       prev: this.tail,
       next: null,
     };
 
     if (this.tail) {
-      this.tail.next = newNode;
+      this.tail.next = new_node;
     } else {
       // 如果链表为空，新节点同时也是头节点
-      this.head = newNode;
+      this.head = new_node;
     }
 
-    this.tail = newNode;
+    this.tail = new_node;
     this.length++;
   }
 
@@ -75,25 +75,25 @@ export class DoublyLinkedList<T> {
       return true;
     }
 
-    const newNode: DoublyLinkedListNode<T> = {
+    const new_node: DoublyLinkedListNode<T> = {
       value,
       prev: null,
       next: null,
     };
 
     let current = this.head;
-    let currentIndex = 0;
+    let current_index = 0;
 
-    while (currentIndex < index - 1 && current) {
+    while (current_index < index - 1 && current) {
       current = current.next;
-      currentIndex++;
+      current_index++;
     }
 
     if (current && current.next) {
-      newNode.prev = current;
-      newNode.next = current.next;
-      current.next.prev = newNode;
-      current.next = newNode;
+      new_node.prev = current;
+      new_node.next = current.next;
+      current.next.prev = new_node;
+      current.next = new_node;
       this.length++;
       return true;
     }
@@ -106,7 +106,7 @@ export class DoublyLinkedList<T> {
       return null;
     }
 
-    const removedValue = this.head.value;
+    const removed_value = this.head.value;
 
     if (this.head.next) {
       this.head.next.prev = null;
@@ -118,7 +118,7 @@ export class DoublyLinkedList<T> {
     }
 
     this.length--;
-    return removedValue;
+    return removed_value;
   }
 
   removeTail(): T | null {
@@ -126,7 +126,7 @@ export class DoublyLinkedList<T> {
       return null;
     }
 
-    const removedValue = this.tail.value;
+    const removed_value = this.tail.value;
 
     if (this.tail.prev) {
       this.tail.prev.next = null;
@@ -137,7 +137,7 @@ export class DoublyLinkedList<T> {
     }
 
     this.length--;
-    return removedValue;
+    return removed_value;
   }
 
   removeAt(index: number): T | null {
@@ -154,11 +154,11 @@ export class DoublyLinkedList<T> {
     }
 
     let current = this.head;
-    let currentIndex = 0;
+    let current_index = 0;
 
-    while (currentIndex < index && current) {
+    while (current_index < index && current) {
       current = current.next;
-      currentIndex++;
+      current_index++;
     }
 
     if (current && current.prev && current.next) {
@@ -222,11 +222,11 @@ export class DoublyLinkedList<T> {
     }
 
     let current = this.head;
-    let currentIndex = 0;
+    let current_index = 0;
 
-    while (currentIndex < index && current) {
+    while (current_index < index && current) {
       current = current.next;
-      currentIndex++;
+      current_index++;
     }
 
     return current ? current.value : null;
@@ -238,11 +238,11 @@ export class DoublyLinkedList<T> {
     }
 
     let current = this.head;
-    let currentIndex = 0;
+    let current_index = 0;
 
-    while (currentIndex < index && current) {
+    while (current_index < index && current) {
       current = current.next;
-      currentIndex++;
+      current_index++;
     }
 
     if (current) {

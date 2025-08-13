@@ -52,109 +52,45 @@ class NLRUCache<K, V> {
  *
  * 首先考虑链表, 因为我们只管首尾顺序
  */
-
-type LNode<K, V> = {
-  pre: LNode<K, V> | null;
-  next: LNode<K, V> | null;
-  val: V;
-  key: K;
-};
-
-// 用于调试, 可以看lru队列
-const debuglog = <K, V>(head: LNode<K, V> | null) => {
-  let temp = head;
-  if (!temp) return;
-  let txt = `[ ${temp.key}`;
-  while (temp.next) {
-    temp = temp.next;
-    txt = `${txt} ${temp.key}`;
-  }
-  return `${txt} ]`;
-};
+import { DoublyLinkedList } from "./base";
 
 class LRUCache<K, V> {
-  private map: Map<K, LNode<K, V>> = new Map();
-  private tail: LNode<K, V> | null = null;
-  private head: LNode<K, V> | null = null;
-  private count = 0;
+  private map: Map<K, V> = new Map();
+  private list = new DoublyLinkedList<K>();
 
   constructor(readonly capacity: number) {}
 
-  get(key: K): V | -1 {
-    const result = (() => {
-      if (this.map.has(key)) {
-        const node = this.map.get(key)!;
-        this.remove(node);
-        this.toTail(node);
-        return node.val;
-      }
-      return -1;
-    })();
-    console.log(`get ${key} -> ${debuglog(this.head)}; result is ${result}`);
-    return result;
+  get(key: K): V | null {
+    if (this.map.has(key)) {
+      const node = this.map.get(key)!;
+      this.list.remove(key);
+      this.list.append(key);
+      return node;
+    }
+    return null;
+  }
+
+  delete(key: K): void {
+    if (this.map.has(key)) {
+      this.map.delete(key);
+      this.list.remove(key);
+    }
   }
 
   put(key: K, val: V): void {
     if (!this.map.has(key)) {
-      const new_node = this.createNode(key, val);
-      this.count += 1;
-      this.toTail(new_node);
-      this.map.set(key, new_node);
-      if (this.count > this.capacity) {
-        this.map.delete(this.head!.key);
-        this.remove(this.head!);
-        this.count -= 1;
+      this.list.append(key);
+      this.map.set(key, val);
+      if (this.list.size > this.capacity) {
+        const head = this.list.get(0);
+        this.map.delete(head!);
+        this.list.remove(head!);
       }
     } else {
       // update cache
-      const node = this.map.get(key);
-      node!.val = val;
-      this.remove(node!);
-      this.toTail(node!);
-    }
-    console.log(`put ${key} -> ${debuglog(this.head)}`);
-  }
-
-  private createNode(key: K, val: V) {
-    return {
-      pre: null,
-      next: null,
-      val,
-      key,
-    };
-  }
-
-  private remove(node: LNode<K, V>) {
-    if (node.pre) {
-      node.pre.next = node.next;
-      if (!node.next) {
-        this.tail = node.pre;
-      }
-    } else {
-      this.head = node.pre;
-    }
-    if (node.next) {
-      node.next.pre = node.pre;
-      if (!node.pre) {
-        this.head = node.next;
-      }
-    } else {
-      this.tail = node.pre;
-    }
-    node.pre = null;
-    node.next = null;
-  }
-
-  private toTail(node: LNode<K, V>) {
-    if (this.tail) {
-      node.next = null;
-      node.pre = this.tail;
-      this.tail.next = node;
-      this.tail = node;
-    } else {
-      this.head = node;
-      this.tail = node;
-      this.tail.next = null;
+      this.map.set(key, val);
+      this.list.remove(key!);
+      this.list.append(key!);
     }
   }
 }
