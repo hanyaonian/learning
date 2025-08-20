@@ -70,3 +70,23 @@ see: https://github.com/nvm-sh/nvm
 
   - solution1: place correct package in C:\Users\xxx\AppData\Roaming\nvm\temp
   - solution2: nvm npm_mirror `https://registry.npmmirror.com/mirrors/` (any registry avalible)
+
+
+- common usage
+
+```sh
+# list local node versions
+nvm ls
+
+# list remote node versions
+nvm ls:remote
+
+# use specific version of node
+nvm use xx
+
+# download specific version of node
+nvm install xx
+
+# set default node version
+nvm alias default xx
+```
