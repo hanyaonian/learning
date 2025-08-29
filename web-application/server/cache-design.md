@@ -4,7 +4,7 @@ The main function of `Cache` is to improve response speed and reduce disk reads.
 
 ## Common Issues
 
-The three main questions that the desgin of `Cache` facing are: 
+The three main questions that the desgin of `Cache` facing are:
 
 - Cache penetration 缓存穿透
 - Cache Avalanche 缓存雪崩
@@ -13,8 +13,13 @@ The three main questions that the desgin of `Cache` facing are:
 ### Cache penetration
 
 - [Bloom Filter](https://javaguide.cn/cs-basics/data-structure/bloom-filter.html)
-- [reference: redis-caching-avalanche-and-caching-penetration](https://github.com/doocs/advanced-java/blob/main/docs/high-concurrency/redis-caching-avalanche-and-caching-penetration.md)
 
 ### Cache Avalanche
 
 ### Hotspot invalid
+
+-
+
+## Reference
+
+- [reference: redis-caching-avalanche-and-caching-penetration](https://github.com/doocs/advanced-java/blob/main/docs/high-concurrency/redis-caching-avalanche-and-caching-penetration.md)

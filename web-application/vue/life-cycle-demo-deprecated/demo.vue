@@ -11,34 +11,34 @@
 </template>
 
 <script>
-import child from './child';
+import child from "./child";
 export default {
-  name: 'father',
+  name: "father",
   components: {
-    child
+    child,
   },
   data() {
     return {
       number: 0,
-      childVal: 0
+      childVal: 0,
     };
   },
   methods: {
     changeVal(val) {
       this.childVal = val;
-    }
+    },
   },
   created() {
-    console.log('father created');
+    console.log("father created");
   },
   mounted() {
-    console.log('father mounted');
+    console.log("father mounted");
   },
   beforeUpdate() {
-    console.log('father before update');
+    console.log("father before update");
   },
   updated() {
-    console.log('father update');
-  }
+    console.log("father update");
+  },
 };
 </script>

@@ -1,4 +1,4 @@
-### Vue 父子组件 life hook 调用顺序、时机
+# Vue2 父子组件 life hook 调用顺序、时机
 
 从 demo 中可以看到，创建的 life hook 调用顺序是：
 父 created -> 子 created
@@ -8,7 +8,7 @@
 如果不涉及父组件，那么父组件是不会更新视图的，只会触发子组件的 update 生命周期
 如果设计父组件的更新，那么顺序会是
 
-```
+```txt
 father before update
 child before update
 child update

@@ -14,30 +14,30 @@
 
 <script>
 export default {
-  name: 'child',
-  props: ['number'],
+  name: "child",
+  props: ["number"],
   watch: {
     childNum(val) {
-      this.$emit('change', val);
-    }
+      this.$emit("change", val);
+    },
   },
   data() {
     return {
       childNum: 0,
-      childNum2: 0
+      childNum2: 0,
     };
   },
   created() {
-    console.log('child created');
+    console.log("child created");
   },
   mounted() {
-    console.log('child mounted');
+    console.log("child mounted");
   },
   beforeUpdate() {
-    console.log('child before update');
+    console.log("child before update");
   },
   updated() {
-    console.log('child update');
-  }
+    console.log("child update");
+  },
 };
 </script>
