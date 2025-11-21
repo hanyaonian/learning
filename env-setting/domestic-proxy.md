@@ -2,12 +2,22 @@
 
 ## Go
 
+proxy:
+
+- https://goproxy.cn/ proxy
+- https://golang.google.cn/ 全站
+
+```sh
+# e.g download 1.25.4
+wget -c https://golang.google.cn/dl/go1.25.4.linux-amd64.tar.gz
+```
+
 ```sh
 go env -w GO111MODULE=on
 go env -w GOPROXY=https://goproxy.cn,direct
 ```
 
-or 
+or
 
 ```sh
 echo "export GO111MODULE=on" >> ~/.profile
