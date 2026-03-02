@@ -64,15 +64,7 @@ quickly install and use different versions of node via the command line
 
 see: https://github.com/nvm-sh/nvm
 
-### Downloading Node succeed but no nvm is installed
-
-- error: Downloading npm version 10.2.4... Error while downloading `https://github.com/npm/cli/archive/v10.2.4.zip` ...
-
-  - solution1: place correct package in C:\Users\xxx\AppData\Roaming\nvm\temp
-  - solution2: nvm npm_mirror `https://registry.npmmirror.com/mirrors/` (any registry avalible)
-
-
-- common usage
+### Common usage
 
 ```sh
 # list local node versions
@@ -90,3 +82,17 @@ nvm install xx
 # set default node version
 nvm alias default xx
 ```
+
+
+### Common Issues
+
+- error: Downloading npm version 10.2.4... Error while downloading `https://github.com/npm/cli/archive/v10.2.4.zip` ...
+
+  - solution: place correct package in C:\Users\xxx\AppData\Roaming\nvm\temp
+
+- for CN network condition, add config in `/nvm_install_folder/settings.txt`:
+
+  ```text
+  node_mirror: https://npmmirror.com/mirrors/node/
+  npm_mirror: https://npmmirror.com/mirrors/npm/
+  ```
